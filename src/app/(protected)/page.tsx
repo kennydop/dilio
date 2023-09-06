@@ -1,6 +1,6 @@
 import AppCarousel from "@/app/shared/components/Carousel/AppCarousel";
 import Categories from "../components/Categories/Categories";
-import Trending from "../components/Trending/Trending";
+import NewProducts from "../components/NewProducts/NewProducts";
 
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
         <Categories />
       </div>
       <div className="px-11 py-4">
-        <Trending />
+        <NewProducts />
       </div>
     </div>
   );
