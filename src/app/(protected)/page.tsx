@@ -1,6 +1,6 @@
 import AppCarousel from "@/app/shared/components/Carousel/AppCarousel";
-import Categories from "./components/Categories/Categories";
-import Trending from "./components/Trending/Trending";
+import Categories from "../components/Categories/Categories";
+import Trending from "../components/Trending/Trending";
 
 export default function Home() {
   return (

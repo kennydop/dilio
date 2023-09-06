@@ -5,5 +5,5 @@ export default function GlassComponent({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="glass-bg">{children}</div>;
+  return <div className="glass-bg h-full">{children}</div>;
 }

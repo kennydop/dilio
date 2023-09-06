@@ -5,12 +5,16 @@ import {
   AppButton,
   Input,
   AppIconButton,
+  Typography,
+  Avatar,
 } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import SearchBar from "@/app/shared/components/SearchBar/SearchBar";
+import { useUser } from "@/contexts/UserContext";
 
 export default function Header() {
   const [dynamicStyles, setDynamicStyles] = useState({});
   const [dynamicPadding, setDynamicPadding] = useState({});
+  const { user } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,7 +64,23 @@ export default function Header() {
         <div className="relative flex w-full gap-2 md:w-max">
           <SearchBar />
         </div>
-        <AppButton>Sign In</AppButton>
+        {user ? (
+          <div className="flex items-center gap-4">
+            <Typography variant="h6">
+              {
+                user.displayName?.split(" ")[
+                  user.displayName?.split(" ").length - 1
+                ]
+              }
+            </Typography>
+            <Avatar size="sm" src={user.photoURL!} alt="avatar" />
+            <div></div>
+          </div>
+        ) : (
+          <Link href="/auth">
+            <AppButton>Sign In</AppButton>
+          </Link>
+        )}
       </div>
     </div>
   );

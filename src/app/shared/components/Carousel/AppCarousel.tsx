@@ -36,7 +36,6 @@ function AppCarousel({
           src={image}
           alt={`image ${i}`}
           className="h-full w-full object-cover"
-          objectFit="cover"
           fill={true}
         />
       ))}

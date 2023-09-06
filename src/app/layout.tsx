@@ -2,8 +2,8 @@ import GlassWrapper from "@/app/shared/components/Glass/GlassWrapper";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Header from "@/app/shared/components/Header/Header";
 import Circles from "@/app/components/Backgrouds/Circles";
+import { UserProvider } from "@/contexts/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <Circles /> */}
-        <div className="background-image">
-          <GlassWrapper>
-            <Header />
-            {children}
-          </GlassWrapper>
-        </div>
+        <UserProvider>
+          {/* <Circles /> */}
+          <div className="background-image">
+            <GlassWrapper>{children}</GlassWrapper>
+          </div>
+        </UserProvider>
       </body>
     </html>
   );
