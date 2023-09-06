@@ -12,7 +12,8 @@ import {
   Input,
   Carousel,
   Spinner,
-  Avatar
+  Avatar,
+  Badge,
 } from "@material-tailwind/react";
 import type { ButtonProps } from "@material-tailwind/react";
 
@@ -28,18 +29,22 @@ const AppButton: FC<AppButtonProps> = ({
   onClick,
   className,
   color,
+  variant,
   ref,
   ...props
 }) => {
   return (
     <Button
       ref={ref}
+      variant={variant || "filled"}
       {...props}
       color={color}
       onClick={loading ? undefined : onClick}
-      className={`${color == undefined && "bg-primary text-white"} rounded-md ${
-        className || ""
-      }`}
+      className={`${
+        color == undefined && variant == undefined
+          ? "bg-primary text-white"
+          : ""
+      } rounded-md ${className || ""}`}
     >
       {loading ? (
         <div className="w-full flex justify-center items-center">
@@ -55,14 +60,25 @@ const AppButton: FC<AppButtonProps> = ({
 const AppIconButton: React.FC<AppButtonProps> = ({
   children,
   className,
+  loading,
+  variant,
+  onClick,
+  color,
   ref,
   ...props
 }) => {
   return (
     <IconButton
       ref={ref}
+      variant={variant || "filled"}
       {...props}
-      className={`bg-primary text-white rounded-md ${className || ""}`}
+      color={color}
+      onClick={loading ? undefined : onClick}
+      className={`${
+        color == undefined && variant == undefined
+          ? "bg-primary text-white"
+          : ""
+      } rounded-md ${className || ""}`}
     >
       {children}
     </IconButton>
@@ -86,5 +102,6 @@ export {
   Input,
   Carousel,
   Loading,
-  Avatar
+  Avatar,
+  Badge,
 };

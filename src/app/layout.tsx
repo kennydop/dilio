@@ -22,9 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <UserProvider>
           {/* <Circles /> */}
-          <div className="background-image">
-            <GlassWrapper>{children}</GlassWrapper>
-          </div>
+          {children}
         </UserProvider>
       </body>
     </html>

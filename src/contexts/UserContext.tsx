@@ -30,19 +30,6 @@ import {
 import { GoogleProvider, auth, db } from "@/services/firebase/config";
 import { Loading } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 
-interface IUserContext {
-  user: User | null;
-  setUser: Dispatch<SetStateAction<any>>;
-  createNewAccount: (
-    name: string,
-    email: string,
-    password: string
-  ) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
-  signInWithEmail: (email: string, password: string) => Promise<void>;
-  logOut: () => Promise<void>;
-}
-
 const UserContext = createContext<IUserContext | undefined>(undefined);
 
 export function useUser() {
@@ -54,9 +41,9 @@ export function useUser() {
 }
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser]: any = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userDoc, setUserDoc] = useState<any>(null);
+  const [userDoc, setUserDoc] = useState<IUserDoc | null>(null);
 
   console.log("BEFORE USE EFFECT");
   useEffect(() => {
@@ -66,7 +53,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("AUTH STATE CHANGED");
       console.log(user);
       setUser(user);
-      // if (user) await getUserDoc(user);
+      if (user) await getUserDoc(user);
       setLoading(false);
     });
 
@@ -82,7 +69,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      setUserDoc(docSnap.data());
+      setUserDoc(docSnap.data() as IUserDoc);
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
@@ -108,6 +95,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           email: _user.email,
           photoURL: `https://placeholder-avatars.herokuapp.com/?name=${email}&type=pattern&color=0052ff&bg=cadcff`,
           cart: [],
+          orders: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
         });
       })
       .catch((error) => {
@@ -131,7 +121,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           email: user.email,
           photoURL: user.photoURL,
           cart: [],
+          orders: [],
           token: token,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         });
       })
       .catch((error) => {
@@ -153,6 +146,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
+  const updateCart = async (cart: string[]) => {
+    if (user) {
+      await updateDoc(doc(db, "users", user.uid), {
+        cart: cart,
+      });
+      setUserDoc((prev) => {
+        return {
+          ...prev!,
+          cart: cart,
+        };
+      });
+    }
+  };
+
   const logOut = async () => {
     try {
       await signOut(auth);
@@ -163,10 +170,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value: IUserContext = {
     user,
-    setUser,
+    userDoc,
     createNewAccount,
     signInWithGoogle,
     signInWithEmail,
+    updateCart,
     logOut,
   };
 

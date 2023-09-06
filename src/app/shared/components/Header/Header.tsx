@@ -7,14 +7,16 @@ import {
   AppIconButton,
   Typography,
   Avatar,
+  Badge,
 } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import SearchBar from "@/app/shared/components/SearchBar/SearchBar";
 import { useUser } from "@/contexts/UserContext";
+import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 
 export default function Header() {
   const [dynamicStyles, setDynamicStyles] = useState({});
   const [dynamicPadding, setDynamicPadding] = useState({});
-  const { user } = useUser();
+  const { user, userDoc } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,16 +67,30 @@ export default function Header() {
           <SearchBar />
         </div>
         {user ? (
-          <div className="flex items-center gap-4">
-            <Typography variant="h6">
-              {
-                user.displayName?.split(" ")[
-                  user.displayName?.split(" ").length - 1
-                ]
-              }
-            </Typography>
-            <Avatar size="sm" src={user.photoURL!} alt="avatar" />
-            <div></div>
+          <div className="flex items-center gap-6">
+            <Badge
+              content={userDoc?.cart?.length}
+              className="bg-primary"
+              invisible={(userDoc?.cart?.length ?? 0) < 1}
+            >
+              <AppIconButton
+                size="sm"
+                variant="outlined"
+                className="text-primary border-primary"
+              >
+                <ShoppingBagIcon className="h-4 w-4" />
+              </AppIconButton>
+            </Badge>
+            <div className="flex items-center gap-3">
+              <Typography variant="h6">
+                {
+                  user.displayName?.split(" ")[
+                    user.displayName?.split(" ").length - 1
+                  ]
+                }
+              </Typography>
+              <Avatar size="sm" src={user.photoURL!} alt="avatar" />
+            </div>
           </div>
         ) : (
           <Link href="/auth">

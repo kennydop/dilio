@@ -11,52 +11,79 @@ import Image from "next/image";
 import { AppButton } from "../MaterialTailwind/MaterialTailwind";
 import { useState } from "react";
 import Link from "next/link";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/navigation";
 
 export function ProductCard({ product }: { product: IProduct }) {
-  const [addedToCart, setAddedToCart] = useState(false);
-  const [numberAddedToCart, setNumberAddedToCart] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const { user, userDoc, updateCart } = useUser();
+  const router = useRouter();
+  console.log(product.name, product.id, userDoc?.cart);
 
   return (
-    <Link href={`/products/${product.id}`}>
-      <Card className="">
-        <CardHeader shadow={false} floated={false} className="h-72 relative">
-          <Image
-            src={product.images[0]}
-            alt="card-image"
-            className="h-full w-full object-cover"
-            fill
-          />
-        </CardHeader>
-        <CardBody>
-          <div className="mb-2 flex items-center justify-between">
-            <Typography
-              color="blue-gray"
-              className="font-medium whitespace-nowrap overflow-hidden overflow-ellipsis flex-1"
-              title={product.name}
-            >
-              {product.name}
-            </Typography>
-            <Typography color="blue-gray" className="font-medium">
-              GH₵{product.price}
-            </Typography>
-          </div>
+    // <Link href={`/products/${product.id}`}>
+    <Card className="">
+      <CardHeader shadow={false} floated={false} className="h-72 relative">
+        <Image
+          src={product.images[0]}
+          alt="card-image"
+          className="h-full w-full object-cover"
+          fill
+        />
+      </CardHeader>
+      <CardBody>
+        <div className="mb-2 flex items-center justify-between">
           <Typography
-            variant="small"
-            color="gray"
-            className="font-normal opacity-75 line-clamp-2"
+            color="blue-gray"
+            className="font-medium whitespace-nowrap overflow-hidden overflow-ellipsis flex-1"
+            title={product.name}
           >
-            {product.description}
+            {product.name}
           </Typography>
-        </CardBody>
-        <CardFooter className="pt-0">
-          <AppButton
-            fullWidth={true}
-            className="hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100"
-          >
-            Add to Cart
-          </AppButton>
-        </CardFooter>
-      </Card>
-    </Link>
+          <Typography color="blue-gray" className="font-medium">
+            GH₵{product.price}
+          </Typography>
+        </div>
+        <Typography
+          variant="small"
+          color="gray"
+          className="font-normal opacity-75 line-clamp-2"
+        >
+          {product.description}
+        </Typography>
+      </CardBody>
+      <CardFooter className="pt-0">
+        <AppButton
+          loading={loading}
+          fullWidth={true}
+          className={`hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 ${
+            userDoc?.cart?.find((item) => item == product.id)
+              ? "bg-gray-300 text-gray-600"
+              : "bg-primary text-white"
+          }`}
+          onClick={async () => {
+            if (!user) return router.push("/auth");
+            setLoading(true);
+
+            var newCart = userDoc?.cart ?? [];
+
+            if (newCart.find((item) => item === product.id)) {
+              newCart = newCart.filter((item) => item !== product.id);
+            } else {
+              newCart.push(product.id);
+            }
+
+            await updateCart(newCart);
+            setLoading(false);
+          }}
+        >
+          {userDoc?.cart?.find((item) => item == product.id)
+            ? "Added "
+            : "Add "}
+          to Cart
+        </AppButton>
+      </CardFooter>
+    </Card>
+    // </Link>
   );
 }

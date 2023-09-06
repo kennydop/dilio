@@ -16,12 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="background-image">
-          <GlassWrapper>
-            <Header />
-            {children}
-          </GlassWrapper>
-        </div>
+        <Header />
+        {children}
       </body>
     </html>
   );

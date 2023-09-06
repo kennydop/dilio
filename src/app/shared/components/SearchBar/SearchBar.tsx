@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { AppIconButton } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 
 const SearchBar: React.FC = () => {
@@ -11,7 +11,7 @@ const SearchBar: React.FC = () => {
       />
       <div>
         <AppIconButton size="sm">
-          <MagnifyingGlassIcon />
+          <MagnifyingGlassIcon className="w-4 h-4" />
         </AppIconButton>
       </div>
     </div>
