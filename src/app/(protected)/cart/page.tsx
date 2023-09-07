@@ -48,8 +48,8 @@ export default function Cart() {
 
   return (
     <div className="px-11 py-4 flex gap-4">
-      {loading ? (
-        <div className="flex justify-center items-center h-96">
+      {loading || userDoc == null ? (
+        <div className="flex justify-center items-center h-96 w-full">
           <Loading className="h-8 w-8" />
         </div>
       ) : userDoc?.cart!.length == 0 ? (

@@ -54,6 +54,16 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(user);
       setUser(user);
       if (user) await getUserDoc(user);
+      else {
+        setUserDoc(null);
+        // check if user is on '/cart' or '/orders' and redirect to '/'
+        if (
+          window.location.href.includes("/cart") ||
+          window.location.href.includes("/orders")
+        ) {
+          window.location.href = "/";
+        }
+      }
       setLoading(false);
     });
 

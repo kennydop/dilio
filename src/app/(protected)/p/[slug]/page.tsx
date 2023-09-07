@@ -18,15 +18,20 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
   const [product, setProduct] = useState<IProduct | null>(null);
 
   useEffect(() => {
+    alert("RUNNING USE EFFECT");
+    alert(docId);
     const fetchProduct = async () => {
+      alert("FETCHING PRODUCT");
       setLoading(true);
       const docRef = doc(db, "products", docId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         setProduct(docSnap.data() as IProduct);
+        alert("PRODUCT FOUND");
       } else {
         setProduct(null);
+        alert("PRODUCT NOT FOUND");
       }
       setLoading(false);
     };

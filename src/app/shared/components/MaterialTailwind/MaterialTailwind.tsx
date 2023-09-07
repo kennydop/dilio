@@ -14,6 +14,10 @@ import {
   Spinner,
   Avatar,
   Badge,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
 } from "@material-tailwind/react";
 import type { ButtonProps } from "@material-tailwind/react";
 
@@ -104,4 +108,12 @@ export {
   Loading,
   Avatar,
   Badge,
+    Menu,
+
+  MenuHandler,
+
+  MenuList,
+
+  MenuItem,
+
 };

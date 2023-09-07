@@ -13,6 +13,8 @@ import SearchBar from "@/app/shared/components/SearchBar/SearchBar";
 import { useUser } from "@/contexts/UserContext";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
+import HeaderCategories from "./components/HeaderCategories";
+import AvatarMenu from "./components/AvatarMenu";
 
 export default function Header() {
   const [dynamicStyles, setDynamicStyles] = useState({});
@@ -60,11 +62,16 @@ export default function Header() {
         style={dynamicStyles}
         className="flex justify-between items-center glass-bg w-full h-full p-3"
       >
-        <Link href="/">
-          <h2 className="font-bold text-3xl text-primary cursor-pointer">
-            dilio.
-          </h2>
-        </Link>
+        <div className="flex gap-8 justify-center items-center">
+          <Link href="/">
+            <h2 className="font-bold text-3xl text-primary cursor-pointer">
+              dilio.
+            </h2>
+          </Link>
+          <div>
+            <HeaderCategories />
+          </div>
+        </div>
         <div className="relative w-full gap-2 md:w-max hidden lg:flex">
           <SearchBar />
         </div>
@@ -90,16 +97,7 @@ export default function Header() {
                 <ShoppingBagIcon className="h-4 w-4" />
               </AppIconButton>
             </Badge>
-            <div className="flex items-center gap-3">
-              <Typography variant="h6">
-                {
-                  user.displayName?.split(" ")[
-                    user.displayName?.split(" ").length - 1
-                  ]
-                }
-              </Typography>
-              <Avatar size="sm" src={user.photoURL!} alt="avatar" />
-            </div>
+            <AvatarMenu />
           </div>
         ) : (
           <Link href="/auth">
