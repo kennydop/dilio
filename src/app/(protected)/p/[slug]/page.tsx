@@ -57,7 +57,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
               className="rounded-xl"
               images={product?.images || []}
             />
-            <div className="bg-white rounded-xl shadow-md w-full p-4">
+            <div className="bg-white rounded-xl shadow-md w-full p-4 mb-6">
               <h1 className="text-xl font-bold">Description</h1>
               <p className="text-sm text-gray-500">{product?.description}</p>
             </div>

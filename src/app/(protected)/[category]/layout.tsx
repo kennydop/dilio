@@ -1,3 +1,4 @@
+import Footer from "@/app/shared/components/Footer";
 import Header from "@/app/shared/components/Header/Header";
 import { toCapitalize } from "@/helpers/strings/strings";
 
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

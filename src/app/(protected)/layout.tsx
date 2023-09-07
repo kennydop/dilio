@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 import type { Metadata } from "next";
 import Header from "@/app/shared/components/Header/Header";
+import Footer from "@/app/shared/components/Footer";
 
 export const metadata: Metadata = {
   title: "dilio",
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
