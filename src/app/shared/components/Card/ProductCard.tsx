@@ -65,7 +65,7 @@ export function ProductCard({ product }: { product: IProduct }) {
           loading={loading}
           fullWidth={true}
           className={`hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 ${
-            userDoc?.cart?.find((item) => item == product.id)
+            userDoc?.cart?.find((item) => item.id == product.id)
               ? "bg-gray-300 text-gray-600"
               : "bg-primary text-white"
           }`}
@@ -77,17 +77,20 @@ export function ProductCard({ product }: { product: IProduct }) {
 
             var newCart = userDoc?.cart ?? [];
 
-            if (newCart.find((item) => item === product.id)) {
-              newCart = newCart.filter((item) => item !== product.id);
+            if (newCart.find((item) => item.id === product.id)) {
+              newCart = newCart.filter((item) => item.id !== product.id);
             } else {
-              newCart.push(product.id);
+              newCart.push({
+                id: product.id,
+                quantity: 1,
+              });
             }
 
             await updateCart(newCart);
             setLoading(false);
           }}
         >
-          {userDoc?.cart?.find((item) => item == product.id)
+          {userDoc?.cart?.find((item) => item.id == product.id)
             ? "Added "
             : "Add "}
           to Cart

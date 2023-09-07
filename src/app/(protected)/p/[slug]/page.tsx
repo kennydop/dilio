@@ -67,17 +67,20 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
               <h1 className="text-3xl font-bold">{product?.name}</h1>
               <span className="text-gray-500">
                 {toCapitalize(
-                  product?.category.replaceAll("_", " ").replaceAll("and", "&")
+                  product?.category.replaceAll("-", " ").replaceAll("and", "&")
                 )}
               </span>
               <p className="text-xl font-bold text-primary">
                 GH₵{product?.price}
               </p>
+              <p className="font-bold text-gray-500">
+                Shipping: GH₵{product?.shipping}
+              </p>
               <AppButton
                 loading={adding}
                 fullWidth={true}
                 className={`hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2 ${
-                  userDoc?.cart?.find((item) => item == product.id)
+                  userDoc?.cart?.find((item) => item.id == product.id)
                     ? "bg-gray-300 text-gray-600"
                     : "bg-primary text-white"
                 }`}
@@ -89,17 +92,20 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
                   var newCart = userDoc?.cart ?? [];
 
-                  if (newCart.find((item) => item === product.id)) {
-                    newCart = newCart.filter((item) => item !== product.id);
+                  if (newCart.find((item) => item.id === product.id)) {
+                    newCart = newCart.filter((item) => item.id !== product.id);
                   } else {
-                    newCart.push(product.id);
+                    newCart.push({
+                      id: product.id,
+                      quantity: 1,
+                    });
                   }
 
                   await updateCart(newCart);
                   setAdding(false);
                 }}
               >
-                {userDoc?.cart?.find((item) => item == product.id)
+                {userDoc?.cart?.find((item) => item.id == product.id)
                   ? "Added "
                   : "Add "}
                 to Cart

@@ -146,7 +146,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
-  const updateCart = async (cart: string[]) => {
+  const updateCart = async (cart: ICartItem[]) => {
     if (user) {
       await updateDoc(doc(db, "users", user.uid), {
         cart: cart,

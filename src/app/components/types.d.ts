@@ -10,6 +10,7 @@ interface IProduct {
   name: string;
   description?: string;
   price: number;
+  shipping: number;
   category: string;
   images: string[];
   quantity: number;
