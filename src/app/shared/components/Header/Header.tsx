@@ -12,11 +12,13 @@ import {
 import SearchBar from "@/app/shared/components/SearchBar/SearchBar";
 import { useUser } from "@/contexts/UserContext";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [dynamicStyles, setDynamicStyles] = useState({});
   const [dynamicPadding, setDynamicPadding] = useState({});
   const { user, userDoc } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,6 +79,13 @@ export default function Header() {
                 size="sm"
                 variant="outlined"
                 className="text-primary border-primary"
+                onClick={() => {
+                  if (user) {
+                    router.push("/cart");
+                  } else {
+                    router.push("/auth");
+                  }
+                }}
               >
                 <ShoppingBagIcon className="h-4 w-4" />
               </AppIconButton>

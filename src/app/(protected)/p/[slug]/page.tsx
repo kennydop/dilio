@@ -6,7 +6,7 @@ import {
   Loading,
 } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import { useUser } from "@/contexts/UserContext";
-import { toCapitalize } from "@/helpers/strings/strings";
+import { cediFormatter, toCapitalize } from "@/helpers/strings/strings";
 import { db } from "@/services/firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -71,10 +71,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                 )}
               </span>
               <p className="text-xl font-bold text-primary">
-                GH₵{product?.price}
+                {cediFormatter.format(product?.price)}
               </p>
               <p className="font-bold text-gray-500">
-                Shipping: GH₵{product?.shipping}
+                Shipping: {cediFormatter.format(product?.shipping)}
               </p>
               <AppButton
                 loading={adding}

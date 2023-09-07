@@ -13,6 +13,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
 import { useRouter } from "next/navigation";
+import { cediFormatter } from "@/helpers/strings/strings";
 
 export function ProductCard({ product }: { product: IProduct }) {
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export function ProductCard({ product }: { product: IProduct }) {
       <CardHeader shadow={false} floated={false} className="h-72 relative">
         <Image
           src={product.images[0]}
-          alt="card-image"
+          alt="product image"
           className="h-full w-full object-cover"
           fill
         />
@@ -49,7 +50,7 @@ export function ProductCard({ product }: { product: IProduct }) {
             {product.name}
           </Typography>
           <Typography color="blue-gray" className="font-medium">
-            GH₵{product.price}
+            {cediFormatter.format(product.price)}
           </Typography>
         </div>
         <Typography

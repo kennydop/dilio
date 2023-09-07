@@ -1,5 +1,138 @@
-import React from "react";
+"use client";
+
+import {
+  AppButton,
+  Loading,
+} from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
+import { useUser } from "@/contexts/UserContext";
+import { useState, useEffect } from "react";
+import CartItem from "./components/CartItem";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/services/firebase/config";
+import { cediFormatter } from "@/helpers/strings/strings";
 
 export default function Cart() {
-  return <div>Cart</div>;
+  const { user, userDoc, updateCart } = useUser();
+  const [loading, setLoading] = useState(true);
+  const [clearing, setClearing] = useState(false);
+  const [products, setProducts] = useState<IProduct[] | null>(null);
+
+  useEffect(() => {
+    if (userDoc) {
+      setLoading(false);
+    }
+  }, [userDoc]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (userDoc && userDoc!.cart!.length < 1) return;
+      const q = query(
+        collection(db, "products"),
+        where(
+          "id",
+          "in",
+          userDoc?.cart!.map((item) => item.id)
+        )
+      );
+
+      const querySnapshot = await getDocs(q);
+      const productsArray = querySnapshot.docs.map((doc) => {
+        return doc.data() as IProduct;
+      });
+
+      setProducts(productsArray);
+    };
+
+    fetchProducts();
+  }, [userDoc]);
+
+  return (
+    <div className="px-11 py-4 flex gap-4">
+      {loading ? (
+        <div className="flex justify-center items-center h-96">
+          <Loading className="h-8 w-8" />
+        </div>
+      ) : userDoc?.cart!.length == 0 ? (
+        <div className="flex justify-center items-center h-96 w-full">
+          <h3 className="text-2xl text-center">Your cart is empty</h3>
+        </div>
+      ) : (
+        <>
+          <div className="flex-1 flex flex-col gap-6">
+            {userDoc?.cart!.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                product={products?.find((i) => i.id == item.id)!}
+              />
+            ))}
+            <div className="h-10"></div>
+          </div>
+          <div className="w-64 md:w-72 lg:w-80 xl:w-96">
+            <div className="bg-white rounded-xl shadow-md w-full p-4 flex flex-col gap-2 sticky left-0 right-0 top-20">
+              <h2 className="text-xl font-bold">Order Summary</h2>
+              {userDoc?.cart == null || userDoc?.cart == undefined ? (
+                <div className="h-4 w-48 bg-gray-300 animate-pulse rounded-md"></div>
+              ) : (
+                userDoc?.cart?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center"
+                  >
+                    <p className="">
+                      {products?.find((i) => i.id == item.id)?.name}
+                    </p>
+                    <p className=" text-primary">
+                      x{userDoc?.cart![index].quantity}
+                    </p>
+                  </div>
+                ))
+              )}
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-bold">Total</h3>
+                {products == null || undefined ? (
+                  <div className="h-6 w-32 bg-gray-300 animate-pulse rounded-md"></div>
+                ) : (
+                  <p className="text-lg font-bold text-primary">
+                    {cediFormatter.format(
+                      products!.reduce(
+                        (acc, item) =>
+                          acc +
+                          item.price *
+                            (userDoc?.cart!.find((i) => i.id == item.id)
+                              ?.quantity || 1) +
+                          (item.shipping || 0),
+                        0
+                      )
+                    )}
+                  </p>
+                )}
+              </div>
+              <AppButton
+                loading={clearing}
+                disabled={products == null || undefined}
+                onClick={async () => {
+                  setClearing(true);
+                  await updateCart([]);
+                  setClearing(false);
+                }}
+                className="bg-gray-300 text-gray-600 hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2"
+              >
+                Clear Cart
+              </AppButton>
+              <AppButton
+                disabled={products == null || undefined}
+                onClick={() => {
+                  alert("Checkout not implemented");
+                }}
+                className="bg-primary text-white hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2"
+              >
+                Checkout
+              </AppButton>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
