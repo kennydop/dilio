@@ -9,6 +9,7 @@ interface IUserContext {
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   updateCart: (cart: ICartItem[]) => Promise<void>;
+  placeOrder: (order: IOrder) => Promise<void>;
   logOut: () => Promise<void>;
 }
 
@@ -25,4 +26,16 @@ interface IUserDoc {
 interface ICartItem {
   id: string;
   quantity: number;
+}
+
+interface IOrder {
+  code: string;
+  userId: string;
+  reference: string;
+  items: ICartItem[];
+  total: number;
+  paid: boolean;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

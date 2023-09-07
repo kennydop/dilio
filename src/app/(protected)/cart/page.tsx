@@ -10,12 +10,61 @@ import CartItem from "./components/CartItem";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 import { cediFormatter } from "@/helpers/strings/strings";
+import { PaystackButton, usePaystackPayment } from "react-paystack";
+import { PaystackProps } from "react-paystack/dist/types";
 
 export default function Cart() {
-  const { user, userDoc, updateCart } = useUser();
+  const { user, userDoc, updateCart, placeOrder } = useUser();
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
   const [products, setProducts] = useState<IProduct[] | null>(null);
+
+  const totalAmount: number =
+    userDoc?.cart?.reduce(
+      (acc, item) =>
+        acc +
+        products?.find((i) => i.id == item.id)?.price! *
+          (userDoc?.cart!.find((i) => i.id == item.id)?.quantity || 1) +
+        (products?.find((i) => i.id == item.id)?.shipping || 0),
+      0
+    ) || 0;
+
+  const config: PaystackProps = {
+    reference: new Date().getTime().toString(),
+    email: user?.email,
+    amount: totalAmount * 100,
+    currency: "GHS",
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_TEST_PUBLIC_KEY!,
+  };
+
+  const handlePaystackSuccessAction = async (reference: any) => {
+    const newOrder: IOrder = {
+      code: reference.reference,
+      reference: reference.reference,
+      userId: user!.uid,
+      items: userDoc!.cart!,
+      status: "pending",
+      total: totalAmount,
+      paid: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    await placeOrder(newOrder);
+    await updateCart([]);
+    setLoading(false);
+    console.log(reference);
+  };
+
+  const handlePaystackCloseAction = () => {
+    setLoading(false);
+    console.log("closed");
+  };
+
+  const componentProps = {
+    ...config,
+    onSuccess: (reference: any) => handlePaystackSuccessAction(reference),
+    onClose: handlePaystackCloseAction,
+  };
 
   useEffect(() => {
     if (userDoc) {
@@ -94,17 +143,7 @@ export default function Cart() {
                   <div className="h-6 w-32 bg-gray-300 animate-pulse rounded-md"></div>
                 ) : (
                   <p className="text-lg font-bold text-primary">
-                    {cediFormatter.format(
-                      products!.reduce(
-                        (acc, item) =>
-                          acc +
-                          item.price *
-                            (userDoc?.cart!.find((i) => i.id == item.id)
-                              ?.quantity || 1) +
-                          (item.shipping || 0),
-                        0
-                      )
-                    )}
+                    {cediFormatter.format(totalAmount)}
                   </p>
                 )}
               </div>
@@ -120,15 +159,17 @@ export default function Cart() {
               >
                 Clear Cart
               </AppButton>
-              <AppButton
-                disabled={products == null || undefined}
-                onClick={() => {
-                  alert("Checkout not implemented");
-                }}
-                className="bg-primary text-white hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2"
-              >
-                Checkout
-              </AppButton>
+              <PaystackButton {...componentProps} className="w-full">
+                <AppButton
+                  disabled={products == null || undefined}
+                  onClick={() => {
+                    setLoading(true);
+                  }}
+                  className="w-full bg-primary text-white hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2"
+                >
+                  Checkout
+                </AppButton>
+              </PaystackButton>
             </div>
           </div>
         </>

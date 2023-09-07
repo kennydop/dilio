@@ -17,6 +17,8 @@ import {
   getDoc,
   updateDoc,
   setDoc,
+  collection,
+  addDoc,
 } from "firebase/firestore";
 
 import {
@@ -170,6 +172,22 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const placeOrder = async (order: IOrder) => {
+    const ordersRef = collection(db, "orders");
+    await addDoc(ordersRef, order);
+
+    await updateDoc(doc(db, "users", user!.uid), {
+      orders: [...userDoc!.orders!, order.code],
+    });
+
+    setUserDoc((prev) => {
+      return {
+        ...prev!,
+        orders: [...prev!.orders!, order.code],
+      };
+    });
+  };
+
   const logOut = async () => {
     try {
       await signOut(auth);
@@ -185,6 +203,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     signInWithGoogle,
     signInWithEmail,
     updateCart,
+    placeOrder,
     logOut,
   };
 
