@@ -1,29 +1,24 @@
-"use client";
+/* eslint-disable @next/next/no-async-client-component */
 import { ProductCard } from "@/app/shared/components/Card/ProductCard";
-import { useEffect, useState } from "react";
 import { query, collection, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 
-function NewProducts() {
-  const [newProducts, setNewProducts] = useState<IProduct[]>([]);
+export default async function NewProducts() {
+  const fetchNewProducts = async () => {
+    const q = query(
+      collection(db, "products"),
+      orderBy("createdAt", "desc"),
+      limit(9)
+    );
+    const querySnapshot = await getDocs(q);
+    const products: IProduct[] = [];
+    querySnapshot.forEach((doc) => {
+      products.push({ id: doc.id, ...doc.data() } as IProduct);
+    });
+    return products;
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const q = query(
-        collection(db, "products"),
-        orderBy("createdAt", "desc"),
-        limit(9)
-      );
-      const querySnapshot = await getDocs(q);
-      const products: IProduct[] = [];
-      querySnapshot.forEach((doc) => {
-        products.push({ id: doc.id, ...doc.data() } as IProduct);
-      });
-      setNewProducts(products);
-    };
-
-    fetchData();
-  }, []);
+  const newProducts: IProduct[] = await fetchNewProducts();
 
   return (
     <div className="flex justify-between flex-col gap-4">
@@ -36,5 +31,3 @@ function NewProducts() {
     </div>
   );
 }
-
-export default NewProducts;

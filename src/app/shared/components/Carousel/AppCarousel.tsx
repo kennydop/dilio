@@ -6,14 +6,16 @@ import { Carousel } from "@material-tailwind/react";
 
 function AppCarousel({
   className,
+  height = "h-96",
   images,
 }: {
   className?: string;
   images?: string[];
+  height?: string;
 }) {
   return (
     <Carousel
-      className={`relative h-96 ${className || ""}`}
+      className={`relative ${height} ${className || ""}`}
       autoplay={true}
       loop={true}
       navigation={({ setActiveIndex, activeIndex, length }) => (

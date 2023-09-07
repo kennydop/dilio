@@ -1,29 +1,17 @@
-"use client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import CategoryCard from "./CategoryCard";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 
-interface CategoryProps {
-  name: string;
-  icon: string;
-}
+export default async function Categories() {
+  const fetchCategories = async () => {
+    const querySnapshot = await getDocs(collection(db, "categories"));
+    const categoriesArray = querySnapshot.docs.map((doc) => {
+      return doc.data() as ICategory;
+    });
+    return categoriesArray;
+  };
 
-function Categories() {
-  const [categories, setCategories] = useState<ICategory[]>([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const querySnapshot = await getDocs(collection(db, "categories"));
-      const categoriesArray = querySnapshot.docs.map((doc) => {
-        return doc.data() as ICategory;
-      });
-      setCategories(categoriesArray);
-    };
-
-    fetchCategories();
-  }, []);
+  const categories: ICategory[] = await fetchCategories();
 
   return (
     <div className="flex justify-between flex-col gap-4">
@@ -36,5 +24,3 @@ function Categories() {
     </div>
   );
 }
-
-export default Categories;

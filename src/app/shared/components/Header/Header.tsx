@@ -63,7 +63,7 @@ export default function Header() {
             dilio.
           </h2>
         </Link>
-        <div className="relative flex w-full gap-2 md:w-max">
+        <div className="relative w-full gap-2 md:w-max hidden lg:flex">
           <SearchBar />
         </div>
         {user ? (

@@ -21,8 +21,16 @@ export function ProductCard({ product }: { product: IProduct }) {
   console.log(product.name, product.id, userDoc?.cart);
 
   return (
-    // <Link href={`/products/${product.id}`}>
-    <Card className="">
+    <Card
+      className="cursor-pointer"
+      onClick={() => {
+        router.push(
+          `/p/${product.name.replaceAll("&", "and").replaceAll(" ", "-")}_-_${
+            product.id
+          }`
+        );
+      }}
+    >
       <CardHeader shadow={false} floated={false} className="h-72 relative">
         <Image
           src={product.images[0]}
@@ -61,7 +69,9 @@ export function ProductCard({ product }: { product: IProduct }) {
               ? "bg-gray-300 text-gray-600"
               : "bg-primary text-white"
           }`}
-          onClick={async () => {
+          onClick={async (e) => {
+            e.stopPropagation();
+
             if (!user) return router.push("/auth");
             setLoading(true);
 
@@ -84,6 +94,5 @@ export function ProductCard({ product }: { product: IProduct }) {
         </AppButton>
       </CardFooter>
     </Card>
-    // </Link>
   );
 }
