@@ -47,7 +47,7 @@ const SignInSignUp: FC = () => {
       await createNewAccount(name, signUpEmail, signUpPassword);
       goToHome();
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       setSignUpError(getError(error.code));
     }
     setLoading(false);
@@ -70,7 +70,7 @@ const SignInSignUp: FC = () => {
       await signInWithEmail(signInEmail, signInPassword);
       goToHome();
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       setSignInError(getError(error.code));
     }
     setLoading(false);

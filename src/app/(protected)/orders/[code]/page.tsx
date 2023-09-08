@@ -37,7 +37,6 @@ export default function OrderDetails({ params }: { params: { code: string } }) {
 
       setOrder(_order);
       setLoading(false);
-      console.log(_order);
     };
 
     fetchOrderDetails();

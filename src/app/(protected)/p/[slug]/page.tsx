@@ -6,6 +6,7 @@ import {
   Loading,
 } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import { useUser } from "@/contexts/UserContext";
+import { ICartItem } from "@/contexts/types";
 import { cediFormatter, toCapitalize } from "@/helpers/strings/strings";
 import { db } from "@/services/firebase/config";
 import { doc, getDoc } from "firebase/firestore";
@@ -85,7 +86,9 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                 loading={adding}
                 fullWidth={true}
                 className={`mt-2 ${
-                  userDoc?.cart?.find((item) => item.id == product.id)
+                  userDoc?.cart?.find(
+                    (item: ICartItem) => item.id == product.id
+                  )
                     ? "bg-gray-300 text-gray-600"
                     : "bg-primary text-white"
                 }`}
@@ -97,8 +100,12 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
                   var newCart = userDoc?.cart ?? [];
 
-                  if (newCart.find((item) => item.id === product.id)) {
-                    newCart = newCart.filter((item) => item.id !== product.id);
+                  if (
+                    newCart.find((item: ICartItem) => item.id === product.id)
+                  ) {
+                    newCart = newCart.filter(
+                      (item: ICartItem) => item.id !== product.id
+                    );
                   } else {
                     newCart.push({
                       id: product.id,
@@ -110,7 +117,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                   setAdding(false);
                 }}
               >
-                {userDoc?.cart?.find((item) => item.id == product.id)
+                {userDoc?.cart?.find((item: ICartItem) => item.id == product.id)
                   ? "Added "
                   : "Add "}
                 to Cart

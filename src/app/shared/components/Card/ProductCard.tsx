@@ -14,12 +14,12 @@ import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { cediFormatter } from "@/helpers/strings/strings";
+import { ICartItem } from "@/contexts/types";
 
 export function ProductCard({ product }: { product: IProduct }) {
   const [loading, setLoading] = useState(false);
   const { user, userDoc, updateCart } = useUser();
   const router = useRouter();
-  console.log(product.name, product.id, userDoc?.cart);
 
   return (
     <Card
@@ -66,7 +66,7 @@ export function ProductCard({ product }: { product: IProduct }) {
           loading={loading}
           fullWidth={true}
           className={`${
-            userDoc?.cart?.find((item) => item.id == product.id)
+            userDoc?.cart?.find((item: ICartItem) => item.id == product.id)
               ? "bg-gray-300 text-gray-600"
               : "bg-primary text-white"
           }`}
@@ -78,8 +78,10 @@ export function ProductCard({ product }: { product: IProduct }) {
 
             var newCart = userDoc?.cart ?? [];
 
-            if (newCart.find((item) => item.id === product.id)) {
-              newCart = newCart.filter((item) => item.id !== product.id);
+            if (newCart.find((item: ICartItem) => item.id === product.id)) {
+              newCart = newCart.filter(
+                (item: ICartItem) => item.id !== product.id
+              );
             } else {
               newCart.push({
                 id: product.id,
@@ -91,7 +93,7 @@ export function ProductCard({ product }: { product: IProduct }) {
             setLoading(false);
           }}
         >
-          {userDoc?.cart?.find((item) => item.id == product.id)
+          {userDoc?.cart?.find((item: ICartItem) => item.id == product.id)
             ? "Added "
             : "Add "}
           to Cart

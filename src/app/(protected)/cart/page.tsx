@@ -35,10 +35,10 @@ export default function Cart() {
 
   const totalAmount: number =
     userDoc?.cart?.reduce(
-      (acc: number, item: IProduct) =>
+      (acc: number, item: ICartItem) =>
         acc +
         products?.find((i) => i.id == item.id)?.price! *
-          (userDoc?.cart!.find((i: IProduct) => i.id == item.id)?.quantity ||
+          (userDoc?.cart!.find((i: ICartItem) => i.id == item.id)?.quantity ||
             1) +
         (products?.find((i) => i.id == item.id)?.shipping || 0),
       0
@@ -71,12 +71,10 @@ export default function Cart() {
     await updateCart([]);
     setCheckoutSeccess(true);
     setLoading(false);
-    console.log(reference);
   };
 
   const handlePaystackCloseAction = () => {
     setLoading(false);
-    console.log("closed");
   };
 
   const componentProps = {
@@ -99,7 +97,7 @@ export default function Cart() {
         where(
           "id",
           "in",
-          userDoc?.cart!.map((item: IProduct) => item.id)
+          userDoc?.cart!.map((item: ICartItem) => item.id)
         )
       );
 

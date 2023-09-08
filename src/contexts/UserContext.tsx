@@ -31,6 +31,7 @@ import {
 } from "react";
 import { GoogleProvider, auth, db } from "@/services/firebase/config";
 import { Loading } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
+import { ICartItem, IOrder, IUserContext, IUserDoc } from "./types";
 
 const UserContext = createContext<IUserContext | undefined>(undefined);
 
@@ -47,13 +48,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [userDoc, setUserDoc] = useState<IUserDoc | null>(null);
 
-  console.log("BEFORE USE EFFECT");
   useEffect(() => {
-    console.log("RUNNING USE EFFECT");
     setLoading(true);
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log("AUTH STATE CHANGED");
-      console.log(user);
       setUser(user);
       if (user) await getUserDoc(user);
       else {
@@ -72,7 +69,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // Cleanup subscription on unmount
     return () => {
       unsubscribe();
-      console.log("UNSUBSCRIBED");
       setLoading(false);
     };
   }, []);
@@ -84,7 +80,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUserDoc(docSnap.data() as IUserDoc);
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
     }
   };
 
@@ -113,8 +108,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         });
       })
       .catch((error) => {
-        console.log(error);
-        console.log(error.code);
+        // console.log(error);
+        // console.log(error.code);
         throw error;
       });
   };
@@ -140,7 +135,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         });
       })
       .catch((error) => {
-        console.log(error.code);
+        // console.log(error.code);
         throw error;
       });
   };
@@ -153,7 +148,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       .catch((error) => {
         // Handle error
 
-        console.log(error.code);
+        // console.log(error.code);
         throw error;
       });
   };
