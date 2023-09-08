@@ -2,7 +2,7 @@ import GlassWrapper from "@/app/shared/components/Glass/GlassWrapper";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Circles from "@/app/components/Backgrouds/Circles";
+import Circles from "@/app/components/Backgrounds/Circles";
 import { UserProvider } from "@/contexts/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });

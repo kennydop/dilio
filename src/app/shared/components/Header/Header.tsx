@@ -60,7 +60,7 @@ export default function Header() {
     <div style={dynamicPadding} className="sticky top-0 left-0 right-0 z-50">
       <div
         style={dynamicStyles}
-        className="flex justify-between items-center glass-bg w-full h-full p-3"
+        className="flex justify-between items-center glass-bg w-full h-full py-3 px-5"
       >
         <div className="flex gap-8 justify-center items-center">
           <Link href="/">

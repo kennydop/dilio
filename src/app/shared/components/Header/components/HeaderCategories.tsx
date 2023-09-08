@@ -33,7 +33,7 @@ export default function HeaderCategories() {
           Categories
         </Button>
       </MenuHandler>
-      <MenuList className="max-h-72">
+      <MenuList className="max-h-96">
         {categories.map((category) => (
           <MenuItem
             key={category.id}

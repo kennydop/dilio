@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 interface IUserContext {
   user: User | null;
   userDoc: IUserDoc | null;
@@ -19,8 +21,8 @@ interface IUserDoc {
   photoURL: string;
   cart?: ICartItem[];
   orders?: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 interface ICartItem {
@@ -35,7 +37,18 @@ interface IOrder {
   items: ICartItem[];
   total: number;
   paid: boolean;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
+  status: IOrderStatus;
+  processingDate?: Timestamp;
+  inTransitDate?: Timestamp;
+  deliveredDate?: Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
+
+type OrderStatus =
+  | "pending"
+  | "paid"
+  | "processing"
+  | "in-transit"
+  | "delivered"
+  | "canceled";

@@ -16,6 +16,7 @@ import {
   toCapitalize,
 } from "@/helpers/strings/strings";
 import Link from "next/link";
+import { IOrder } from "@/contexts/types";
 
 export default function Orders() {
   const { user } = useUser();
@@ -122,7 +123,7 @@ export default function Orders() {
                                     : status === "pending"
                                     ? "gray"
                                     : status === "processing"
-                                    ? "yellow"
+                                    ? "amber"
                                     : status === "in-transit"
                                     ? "green"
                                     : "red"
@@ -137,7 +138,7 @@ export default function Orders() {
                               variant="small"
                               className="font-medium text-primary"
                             >
-                              Details
+                              SEE DETAILS
                             </Typography>
                           </Link>
                         </td>

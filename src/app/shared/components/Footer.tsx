@@ -5,14 +5,14 @@ import React from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-primary text-white py-8 px-11">
-      <div className="container flex justify-between items-center">
+      <div className="container flex flex-col md:flex-row gap-4 justify-between items-center">
         <div className="text-center md:text-left">
           <h1 className="font-bold text-3xl text-white cursor-pointer">
             dilio.
           </h1>
           <p className="text-sm">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempora
-            exercitationem repellat itaque dolores!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
+            mollitia, molestiae quas.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      <div className="text-center mt-4">
+      <div className="text-center mt-12">
         &copy; 2023 Dilio, All Rights Reserved.
       </div>
     </footer>

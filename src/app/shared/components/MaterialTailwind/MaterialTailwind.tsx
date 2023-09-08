@@ -19,6 +19,11 @@ import {
   MenuList,
   MenuItem,
   Chip,
+  Timeline,
+  TimelineItem,
+  TimelineConnector,
+  TimelineHeader,
+  TimelineIcon,
 } from "@material-tailwind/react";
 import type { ButtonProps } from "@material-tailwind/react";
 
@@ -114,4 +119,9 @@ export {
   MenuList,
   MenuItem,
   Chip,
+  Timeline,
+  TimelineItem,
+  TimelineConnector,
+  TimelineHeader,
+  TimelineIcon,
 };
