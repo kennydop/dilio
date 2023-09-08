@@ -7,27 +7,39 @@ import {
 import { useUser } from "@/contexts/UserContext";
 import { useState, useEffect } from "react";
 import CartItem from "./components/CartItem";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 import { cediFormatter } from "@/helpers/strings/strings";
-import { PaystackButton, usePaystackPayment } from "react-paystack";
+import { PaystackButton } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import Link from "next/link";
 import Image from "next/image";
+import { ICartItem, IOrder } from "@/contexts/types";
+import SelectAddressDialog from "./components/SelectAddressDialog";
 
 export default function Cart() {
   const { user, userDoc, updateCart, placeOrder } = useUser();
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
   const [products, setProducts] = useState<IProduct[] | null>(null);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [checkoutSeccess, setCheckoutSeccess] = useState(false);
 
   const totalAmount: number =
     userDoc?.cart?.reduce(
-      (acc, item) =>
+      (acc: number, item: IProduct) =>
         acc +
         products?.find((i) => i.id == item.id)?.price! *
-          (userDoc?.cart!.find((i) => i.id == item.id)?.quantity || 1) +
+          (userDoc?.cart!.find((i: IProduct) => i.id == item.id)?.quantity ||
+            1) +
         (products?.find((i) => i.id == item.id)?.shipping || 0),
       0
     ) || 0;
@@ -45,12 +57,15 @@ export default function Cart() {
       code: `ORD${reference.reference}`,
       reference: reference.reference,
       userId: user!.uid,
+      name: name,
+      phone: phone,
+      address: address,
       items: userDoc!.cart!,
       status: "pending",
       total: totalAmount,
       paid: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Timestamp(new Date().getTime() / 1000, 0),
+      updatedAt: new Timestamp(new Date().getTime() / 1000, 0),
     };
     await placeOrder(newOrder);
     await updateCart([]);
@@ -84,7 +99,7 @@ export default function Cart() {
         where(
           "id",
           "in",
-          userDoc?.cart!.map((item) => item.id)
+          userDoc?.cart!.map((item: IProduct) => item.id)
         )
       );
 
@@ -129,9 +144,10 @@ export default function Cart() {
       ) : (
         <>
           <div className="flex-1 flex flex-col gap-6">
-            {userDoc?.cart!.map((item) => (
+            {userDoc?.cart!.map((item: ICartItem) => (
               <CartItem
                 key={item.id}
+                edit={true}
                 item={item}
                 product={products?.find((i) => i.id == item.id)!}
               />
@@ -144,7 +160,7 @@ export default function Cart() {
               {userDoc?.cart == null || userDoc?.cart == undefined ? (
                 <div className="h-4 w-48 bg-gray-300 animate-pulse rounded-md"></div>
               ) : (
-                userDoc?.cart?.map((item, index) => (
+                userDoc?.cart?.map((item: ICartItem, index: number) => (
                   <div
                     key={index}
                     className="flex justify-between items-center"
@@ -180,17 +196,24 @@ export default function Cart() {
               >
                 Clear Cart
               </AppButton>
-              <PaystackButton {...componentProps} className="w-full">
-                <AppButton
-                  disabled={products == null || undefined}
-                  onClick={() => {
-                    setLoading(true);
-                  }}
-                  className="w-full bg-primary text-white mt-2"
-                >
-                  Checkout
-                </AppButton>
-              </PaystackButton>
+              <SelectAddressDialog
+                setName={setName}
+                setPhone={setPhone}
+                setAddress={setAddress}
+                PayButton={
+                  <PaystackButton {...componentProps} className="">
+                    <AppButton
+                      disabled={products == null || undefined}
+                      onClick={() => {
+                        setLoading(true);
+                      }}
+                      className="bg-primary text-white mt-2"
+                    >
+                      Proceed To Make Payment
+                    </AppButton>
+                  </PaystackButton>
+                }
+              />
             </div>
           </div>
         </>

@@ -33,6 +33,9 @@ interface ICartItem {
 interface IOrder {
   code: string;
   userId: string;
+  name: string;
+  phone: string;
+  address: string;
   reference: string;
   items: ICartItem[];
   total: number;

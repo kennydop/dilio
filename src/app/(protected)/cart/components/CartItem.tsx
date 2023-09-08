@@ -68,6 +68,7 @@ export default function CartItem({
                 variant="outlined"
                 color="red"
                 onClick={async () => {
+                  setRemoving(true);
                   const newCart =
                     userDoc?.cart?.filter((i: ICartItem) => i.id !== item.id) ||
                     [];
@@ -78,7 +79,9 @@ export default function CartItem({
                 <XMarkIcon className="h-5 w-5" />
               </AppIconButton>
             ) : (
-              <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+              <p className="text-sm text-gray-500">
+                Quantity: <span className="bold">{item.quantity}</span>
+              </p>
             )}
           </div>
         )}

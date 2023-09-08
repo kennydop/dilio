@@ -29,11 +29,11 @@ export default function HeaderCategories() {
   return (
     <Menu>
       <MenuHandler>
-        <Button size="sm" variant="text" className="text-gray-700 focus:ring-0">
+        <Button size="sm" variant="text" className="text-gray-800 focus:ring-0">
           Categories
         </Button>
       </MenuHandler>
-      <MenuList className="max-h-96">
+      <MenuList className="max-h-[28rem]">
         {categories.map((category) => (
           <MenuItem
             key={category.id}

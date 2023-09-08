@@ -19,7 +19,7 @@ import {
   CurrencyDollarIcon,
 } from "@heroicons/react/24/solid";
 import { ActivitiesTimeline } from "./components/ActivitiesTimeline";
-import { formatDate } from "@/helpers/strings/strings";
+import { cediFormatter, formatDate } from "@/helpers/strings/strings";
 import { IOrder } from "@/contexts/types";
 
 export default function OrderDetails({ params }: { params: { code: string } }) {
@@ -50,7 +50,7 @@ export default function OrderDetails({ params }: { params: { code: string } }) {
           <Loading className="h-8 w-8" />
         </div>
       ) : order != null || order != undefined ? (
-        <div className="mb-40">
+        <div>
           <h2 className="font-bold text-2xl capitalize mb-4">
             {order.code + " "}Details
           </h2>
@@ -59,8 +59,31 @@ export default function OrderDetails({ params }: { params: { code: string } }) {
               {order.items.map((item) => (
                 <CartItem item={item} key={item.id} />
               ))}
+              <ul className="w-full bg-white rounded-xl shadow-md my-8 p-4">
+                <li className="flex-1 flex justify-between items-center py-4">
+                  <span>Total</span>
+                  <span className="text-lg font-bold">
+                    {cediFormatter.format(order.total)}
+                  </span>
+                </li>
+                <li className="flex-1 flex justify-between items-center py-4">
+                  <span className="font-bold">Deliver To:</span>
+                </li>
+                <li className="flex-1 flex justify-between items-center py-4">
+                  <span>Name</span>
+                  <span className="text-lg font-bold">{order.name}</span>
+                </li>
+                <li className="flex-1 flex justify-between items-center py-4">
+                  <span>Phone</span>
+                  <span className="text-lg font-bold">{order.phone}</span>
+                </li>
+                <li className="flex-1 flex justify-between items-center py-4">
+                  <span>Address</span>
+                  <span className="text-lg font-bold">{order.address}</span>
+                </li>
+              </ul>
             </div>
-            <div className="w-[25rem] sticky top-20">
+            <div className="w-[25rem] sticky top-20 h-fit">
               <ActivitiesTimeline order={order} />
             </div>
           </div>

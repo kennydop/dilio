@@ -1,8 +1,8 @@
-import React from "react";
+import React, { HTMLInputTypeAttribute } from "react";
 
 interface Props {
   placeholder: string;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   className?: string;
   required?: boolean;
   autocomplete?: string;
