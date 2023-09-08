@@ -84,7 +84,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
               <AppButton
                 loading={adding}
                 fullWidth={true}
-                className={`hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2 ${
+                className={`mt-2 ${
                   userDoc?.cart?.find((item) => item.id == product.id)
                     ? "bg-gray-300 text-gray-600"
                     : "bg-primary text-white"

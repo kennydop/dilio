@@ -65,7 +65,7 @@ export function ProductCard({ product }: { product: IProduct }) {
         <AppButton
           loading={loading}
           fullWidth={true}
-          className={`hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 ${
+          className={`${
             userDoc?.cart?.find((item) => item.id == product.id)
               ? "bg-gray-300 text-gray-600"
               : "bg-primary text-white"

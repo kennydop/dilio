@@ -18,6 +18,7 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
+  Chip,
 } from "@material-tailwind/react";
 import type { ButtonProps } from "@material-tailwind/react";
 
@@ -108,12 +109,9 @@ export {
   Loading,
   Avatar,
   Badge,
-    Menu,
-
+  Menu,
   MenuHandler,
-
   MenuList,
-
   MenuItem,
-
+  Chip,
 };

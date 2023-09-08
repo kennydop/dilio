@@ -12,12 +12,15 @@ import { db } from "@/services/firebase/config";
 import { cediFormatter } from "@/helpers/strings/strings";
 import { PaystackButton, usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Cart() {
   const { user, userDoc, updateCart, placeOrder } = useUser();
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
   const [products, setProducts] = useState<IProduct[] | null>(null);
+  const [checkoutSeccess, setCheckoutSeccess] = useState(false);
 
   const totalAmount: number =
     userDoc?.cart?.reduce(
@@ -39,7 +42,7 @@ export default function Cart() {
 
   const handlePaystackSuccessAction = async (reference: any) => {
     const newOrder: IOrder = {
-      code: reference.reference,
+      code: `ORD${reference.reference}`,
       reference: reference.reference,
       userId: user!.uid,
       items: userDoc!.cart!,
@@ -51,6 +54,7 @@ export default function Cart() {
     };
     await placeOrder(newOrder);
     await updateCart([]);
+    setCheckoutSeccess(true);
     setLoading(false);
     console.log(reference);
   };
@@ -97,7 +101,24 @@ export default function Cart() {
 
   return (
     <div className="px-11 py-4 flex gap-4">
-      {loading || userDoc == null ? (
+      {checkoutSeccess ? (
+        <div className="flex flex-col justify-center items-center py-24 w-full">
+          <div className="flex flex-col justify-center items-center gap-4 bg-white p-8 rounded-xl shadow-md">
+            <Image
+              alt="Success"
+              src="/assets/images/success.gif"
+              width={200}
+              height={200}
+            />
+            <h3 className="text-2xl text-center">
+              Your order has been placed successfully
+            </h3>
+            <Link href="/orders" className="text-primary w-full">
+              <AppButton fullWidth={true}>View Orders</AppButton>
+            </Link>
+          </div>
+        </div>
+      ) : loading || userDoc == null ? (
         <div className="flex justify-center items-center h-96 w-full">
           <Loading className="h-8 w-8" />
         </div>
@@ -155,7 +176,7 @@ export default function Cart() {
                   await updateCart([]);
                   setClearing(false);
                 }}
-                className="bg-gray-300 text-gray-600 hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2"
+                className="bg-gray-300 text-gray-600 mt-2"
               >
                 Clear Cart
               </AppButton>
@@ -165,7 +186,7 @@ export default function Cart() {
                   onClick={() => {
                     setLoading(true);
                   }}
-                  className="w-full bg-primary text-white hover:scale-105 focus:scale-105 focus:shadow-none active:scale-100 mt-2"
+                  className="w-full bg-primary text-white mt-2"
                 >
                   Checkout
                 </AppButton>

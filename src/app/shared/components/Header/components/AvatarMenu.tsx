@@ -1,7 +1,6 @@
 import {
   Menu,
   MenuHandler,
-  Button,
   MenuList,
   MenuItem,
   Typography,
@@ -13,6 +12,7 @@ import { useRouter } from "next/navigation";
 
 export default function AvatarMenu() {
   const { user, logOut } = useUser();
+  const router = useRouter();
   return (
     <Menu>
       <MenuHandler>
@@ -28,7 +28,12 @@ export default function AvatarMenu() {
         </div>
       </MenuHandler>
       <MenuList>
-        <MenuItem className="flex items-center gap-2">
+        <MenuItem
+          className="flex items-center gap-2"
+          onClick={() => {
+            router.push("/orders");
+          }}
+        >
           <TruckIcon className="h-4 w-4" />
           <Typography variant="small" className="font-normal">
             My Orders
