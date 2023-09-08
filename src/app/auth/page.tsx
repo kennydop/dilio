@@ -111,7 +111,7 @@ const SignInSignUp: FC = () => {
                 Enter your details to create an account.
               </Typography>
             </div>
-            <GoogleSignInButton onClick={handleGoogleSignIn} />
+            {/* <GoogleSignInButton onClick={handleGoogleSignIn} /> */}
 
             <FormInput
               placeholder="Name"
@@ -166,7 +166,7 @@ const SignInSignUp: FC = () => {
                 Enter your details to log in to your account.
               </Typography>
             </div>
-            <GoogleSignInButton onClick={handleGoogleSignIn} />
+            {/* <GoogleSignInButton onClick={handleGoogleSignIn} /> */}
             <FormInput
               type="email"
               placeholder="Email"
