@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Raleway", sans-serif !important;
 }
 
 body {
@@ -19,6 +21,30 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+/* Customize scrollbar for Webkit browsers like Chrome and Safari */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0051ffaf;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0051ffc8;
+}
+
+::-webkit-scrollbar-track {
+  background: #0051ff3b;
+}
+
+/* Customize scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
 }
 
 @layer components {

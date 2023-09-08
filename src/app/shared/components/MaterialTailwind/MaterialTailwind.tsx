@@ -26,6 +26,8 @@ import {
   TimelineIcon,
 } from "@material-tailwind/react";
 import type { ButtonProps } from "@material-tailwind/react";
+import { Raleway } from "next/font/google";
+const font = Raleway({ subsets: ["latin"] });
 
 interface AppButtonProps extends ButtonProps {
   children: React.ReactNode;

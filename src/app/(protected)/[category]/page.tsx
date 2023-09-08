@@ -28,7 +28,7 @@ export default async function CategoryPage({
 
   return (
     <div className="px-11 py-4">
-      <div className="flex justify-between flex-col gap-4">
+      <div className="flex justify-between flex-col gap-4 mb-40">
         <h2 className="font-bold text-2xl capitalize">
           {category.replaceAll("-", " ").replaceAll("and", "&")}
         </h2>
