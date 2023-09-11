@@ -33,3 +33,7 @@ export const getError = (code: ErrorCodeKeys | string): string => {
     errorCodes[code as ErrorCodeKeys] ?? "An error occurred, please try again."
   );
 };
+
+export const getWeekday = (date: Date): string => {
+  return new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(date);
+};

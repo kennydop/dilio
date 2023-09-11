@@ -3,25 +3,49 @@ import DashboardCard from "./components/DashboardCard/DashboardCard";
 import {
   ArchiveBoxIcon,
   PresentationChartBarIcon,
-  QueueListIcon,
   ShoppingBagIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid";
 import { cediFormatter } from "@/helpers/strings/strings";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 import { IOrder } from "@/contexts/types";
 import OutOfStockTable from "./components/OutOfStockTable";
+import {
+  CartesianGrid,
+  LineChart,
+  XAxis,
+  YAxis,
+  Line,
+  Tooltip,
+} from "recharts";
+import { getWeekday } from "@/utils/utils";
+
+interface ISale {
+  day: string;
+  sales: number;
+}
 
 export default function Main() {
-  const [orders, setOrders] = useState<IOrder[] | null>();
-  const [products, setProducts] = useState<IProduct[] | null>([]);
+  const [orders, setOrders] = useState<IOrder[]>();
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(false);
   const [tRevenue, setTRevenue] = useState(0);
   const [customers, setCustomers] = useState(new Set());
   const [productsOutOfStock, setProductsOutOfStock] = useState<
     IProduct[] | null
   >([]);
+  const [sales, setSales] = useState<ISale[]>([]);
+
+  const generateInitialSales = (): ISale[] => {
+    const _sales: ISale[] = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+      const weekDay = getWeekday(day);
+      _sales.push({ day: weekDay, sales: 0 });
+    }
+    return _sales.reverse();
+  };
 
   const fetchOrders = async () => {
     const q = query(collection(db, "orders"));
@@ -31,6 +55,8 @@ export default function Main() {
       return doc.data() as IOrder;
     });
     setOrders(ordersArray);
+
+    var _sales: ISale[] = [];
 
     ordersArray.forEach((order) => {
       setTRevenue((prev) => prev + order.total);
@@ -55,12 +81,38 @@ export default function Main() {
     setProducts(productsArray);
   };
 
+  const fetchPastWeekSales = async () => {
+    const sales = generateInitialSales();
+    const q = query(
+      collection(db, "orders"),
+      where("createdAt", ">", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)),
+      orderBy("createdAt", "desc")
+    );
+
+    const querySnapshot = await getDocs(q);
+    const ordersArray = querySnapshot.docs.map((doc) => {
+      return doc.data() as IOrder;
+    });
+
+    ordersArray.forEach((order) => {
+      const day = getWeekday(new Date(order.createdAt.seconds * 1000));
+      const index = sales.findIndex((sale) => sale.day === day);
+      if (index !== -1) {
+        sales[index].sales += order.total;
+      }
+    });
+
+    setSales(sales);
+  };
+
   const fetchData = async () => {
     setLoading(true);
     setCustomers(new Set());
     setTRevenue(0);
+    setSales([]);
     await fetchOrders();
     await fetchProducts();
+    await fetchPastWeekSales();
     setLoading(false);
   };
 
@@ -74,7 +126,7 @@ export default function Main() {
       <div className="flex gap-4">
         <DashboardCard
           icon={<PresentationChartBarIcon className="w-5 h-5" />}
-          title="Total Revenuex"
+          title="Total Revenue"
           info={cediFormatter.format(tRevenue)}
           color="bg-green-200"
         />
@@ -103,6 +155,17 @@ export default function Main() {
           <OutOfStockTable products={productsOutOfStock} />
         </div>
       )}
+
+      <div className="flex flex-col gap-2">
+        <p className="font-bold">Past Week Sales Analytics</p>
+        <LineChart width={900} height={200} data={sales}>
+          <XAxis dataKey="day" />
+          <YAxis />
+          <CartesianGrid stroke="#ccc" />
+          <Tooltip />
+          <Line type="monotone" dataKey="sales" stroke="#0052ff" />
+        </LineChart>
+      </div>
     </div>
   );
 }
