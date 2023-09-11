@@ -13,8 +13,8 @@ export default function DashboardCard({
   color: string;
 }) {
   return (
-    <Card>
-      <div className="flex gap-4 p-4 w-56">
+    <Card className="hover:shadow-lg cursor-default">
+      <div className="flex gap-4 p-4 w-[14.2rem]">
         <div
           className={`p-4 rounded-full ${color}  ${
             color && "text-white"
