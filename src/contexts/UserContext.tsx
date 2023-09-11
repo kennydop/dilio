@@ -181,6 +181,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         orders: [...prev!.orders!, order.code],
       };
     });
+
+    // Update products quantity
+    order.items.forEach(async (item) => {
+      const product = await getDoc(doc(db, "products", item.id));
+      const quantity = product.data()!.quantity - item.quantity;
+      await updateDoc(doc(db, "products", item.id), {
+        quantity: quantity,
+      });
+    });
   };
 
   const logOut = async () => {

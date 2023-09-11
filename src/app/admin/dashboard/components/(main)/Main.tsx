@@ -97,10 +97,12 @@ export default function Main() {
           color="bg-red-200"
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <p className="font-bold">Out of Stock</p>
-        <OutOfStockTable />
-      </div>
+      {productsOutOfStock && productsOutOfStock.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="font-bold">Out of Stock</p>
+          <OutOfStockTable products={productsOutOfStock} />
+        </div>
+      )}
     </div>
   );
 }
