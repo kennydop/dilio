@@ -24,6 +24,10 @@ import {
   TimelineConnector,
   TimelineHeader,
   TimelineIcon,
+  List,
+  ListItem,
+  ListItemPrefix,
+  ListItemSuffix,
 } from "@material-tailwind/react";
 import type { ButtonProps } from "@material-tailwind/react";
 import { Raleway } from "next/font/google";
@@ -126,4 +130,8 @@ export {
   TimelineConnector,
   TimelineHeader,
   TimelineIcon,
+  List,
+  ListItem,
+  ListItemPrefix,
+  ListItemSuffix,
 };

@@ -3,21 +3,9 @@
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 import { useEffect, useState } from "react";
-import {
-  Loading,
-  Timeline,
-  TimelineConnector,
-  TimelineIcon,
-  TimelineItem,
-  Typography,
-} from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
+import { Loading } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import CartItem from "../../cart/components/CartItem";
-import TimelineHeader from "@material-tailwind/react/components/Timeline/TimelineBody";
-import {
-  ArchiveBoxIcon,
-  BellIcon,
-  CurrencyDollarIcon,
-} from "@heroicons/react/24/solid";
+
 import { ActivitiesTimeline } from "./components/ActivitiesTimeline";
 import { cediFormatter, formatDate } from "@/helpers/strings/strings";
 import { IOrder } from "@/contexts/types";

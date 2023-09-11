@@ -16,7 +16,10 @@ import { useRouter } from "next/navigation";
 import HeaderCategories from "./components/HeaderCategories";
 import AvatarMenu from "./components/AvatarMenu";
 
-export default function Header() {
+export default function Header({
+  removeDashboard = false,
+  removeSearch = false,
+}) {
   const [dynamicStyles, setDynamicStyles] = useState({});
   const [dynamicPadding, setDynamicPadding] = useState({});
   const { user, userDoc } = useUser();
@@ -71,16 +74,23 @@ export default function Header() {
           <div>
             <HeaderCategories />
           </div>
-          <Link
-            href="/admin/dashboard"
-            className="font-bold uppercase text-xs text-gray-800"
-          >
-            Dashboard
-          </Link>
+          {!removeDashboard && userDoc?.admin == true && (
+            <Link href="/admin/dashboard" className="">
+              <AppButton
+                size="sm"
+                variant="text"
+                className="text-gray-800 focus:ring-0"
+              >
+                Dashboard
+              </AppButton>
+            </Link>
+          )}
         </div>
-        <div className="relative w-full gap-2 md:w-max hidden lg:flex">
-          <SearchBar />
-        </div>
+        {!removeSearch && (
+          <div className="relative w-full gap-2 md:w-max hidden lg:flex">
+            <SearchBar />
+          </div>
+        )}
         {user ? (
           <div className="flex items-center gap-6">
             <Badge
