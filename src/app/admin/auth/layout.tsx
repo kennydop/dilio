@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import React from "react";
 
 export const metadata: Metadata = {
-  title: "Sign in",
+  title: "Admin Sign in",
   description: "Sign in to or Sign up for your dilio account",
 };
 

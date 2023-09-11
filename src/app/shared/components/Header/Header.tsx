@@ -71,6 +71,12 @@ export default function Header() {
           <div>
             <HeaderCategories />
           </div>
+          <Link
+            href="/admin/dashboard"
+            className="font-bold uppercase text-xs text-gray-800"
+          >
+            Dashboard
+          </Link>
         </div>
         <div className="relative w-full gap-2 md:w-max hidden lg:flex">
           <SearchBar />

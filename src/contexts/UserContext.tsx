@@ -52,7 +52,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
-      if (user) await getUserDoc(user);
+      if (user && !userDoc) await getUserDoc(user);
       else {
         setUserDoc(null);
         // check if user is on '/cart' or '/orders' and redirect to '/'

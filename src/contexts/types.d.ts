@@ -21,6 +21,7 @@ interface IUserDoc {
   photoURL: string;
   cart?: ICartItem[];
   orders?: string[];
+  admin?: boolean;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
