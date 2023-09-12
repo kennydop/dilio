@@ -7,13 +7,10 @@ import {
 import {
   PresentationChartBarIcon,
   PowerIcon,
-  WalletIcon,
   ArchiveBoxIcon,
-  QueueListIcon,
   ShoppingBagIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function SideNav({
   active,
@@ -42,18 +39,6 @@ export default function SideNav({
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
           Dashboard
-        </ListItem>
-
-        <ListItem
-          className={active == 1 ? "bg-primary text-white" : ""}
-          onClick={(e) => {
-            setActive(1);
-          }}
-        >
-          <ListItemPrefix>
-            <WalletIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Summaries
         </ListItem>
 
         <ListItem

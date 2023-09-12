@@ -7,9 +7,17 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/solid";
 import { cediFormatter } from "@/helpers/strings/strings";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "@/services/firebase/config";
-import { IOrder } from "@/contexts/types";
+import { IOrder, IUserDoc } from "@/contexts/types";
 import OutOfStockTable from "./components/OutOfStockTable";
 import {
   CartesianGrid,
@@ -20,6 +28,7 @@ import {
   Tooltip,
 } from "recharts";
 import { getWeekday } from "@/utils/utils";
+import RecentCustomers from "./components/RecentCustomers";
 
 interface ISale {
   day: string;
@@ -27,11 +36,14 @@ interface ISale {
 }
 
 export default function Main() {
-  const [orders, setOrders] = useState<IOrder[]>();
+  const [tOrders, setTOrders] = useState<IOrder[]>();
+  const [pwOrders, setPWOrders] = useState<IOrder[]>();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(false);
   const [tRevenue, setTRevenue] = useState(0);
-  const [customers, setCustomers] = useState(new Set());
+  const [pwRevenue, setPWRevenue] = useState(0);
+  const [tCustomers, setTCustomers] = useState(new Set<string>());
+  const [recentCustomers, setRecentCustomers] = useState<IUserDoc[]>([]);
   const [productsOutOfStock, setProductsOutOfStock] = useState<
     IProduct[] | null
   >([]);
@@ -54,13 +66,11 @@ export default function Main() {
     const ordersArray = querySnapshot.docs.map((doc) => {
       return doc.data() as IOrder;
     });
-    setOrders(ordersArray);
-
-    var _sales: ISale[] = [];
+    setTOrders(ordersArray);
 
     ordersArray.forEach((order) => {
       setTRevenue((prev) => prev + order.total);
-      setCustomers((prev) => prev.add(order.userId));
+      setTCustomers((prev) => prev.add(order.userId));
     });
   };
 
@@ -93,26 +103,51 @@ export default function Main() {
     const ordersArray = querySnapshot.docs.map((doc) => {
       return doc.data() as IOrder;
     });
+    var _customers = new Set<string>();
 
     ordersArray.forEach((order) => {
+      setPWRevenue((prev) => prev + order.total);
+      _customers.add(order.userId);
       const day = getWeekday(new Date(order.createdAt.seconds * 1000));
       const index = sales.findIndex((sale) => sale.day === day);
       if (index !== -1) {
         sales[index].sales += order.total;
       }
     });
-
+    setPWOrders(ordersArray);
     setSales(sales);
+
+    const _recentCustomers: IUserDoc[] = [];
+    _customers.forEach(async (id: string) => {
+      const customer = await fetchCustomerDetails(id);
+      if (customer) _recentCustomers.push(customer);
+    });
+    setRecentCustomers(_recentCustomers);
+  };
+
+  const fetchCustomerDetails = async (id: string) => {
+    const docRef = doc(db, "users", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data() as IUserDoc;
+    }
   };
 
   const fetchData = async () => {
     setLoading(true);
-    setCustomers(new Set());
+
+    setTCustomers(new Set());
     setTRevenue(0);
     setSales([]);
+    setRecentCustomers([]);
+    setPWRevenue(0);
+    setProductsOutOfStock([]);
+
     await fetchOrders();
     await fetchProducts();
     await fetchPastWeekSales();
+
     setLoading(false);
   };
 
@@ -123,7 +158,7 @@ export default function Main() {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-bold">Overview</h2>
-      <div className="flex gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <DashboardCard
           icon={<PresentationChartBarIcon className="w-5 h-5" />}
           title="Total Revenue"
@@ -133,13 +168,13 @@ export default function Main() {
         <DashboardCard
           icon={<UsersIcon className="w-5 h-5" />}
           title="Total Customers"
-          info={customers.size.toString()}
+          info={tCustomers.size.toString()}
           color="bg-blue-200"
         />
         <DashboardCard
           icon={<ShoppingBagIcon className="w-5 h-5" />}
           title="Total Orders"
-          info={(orders?.length ?? 0).toString()}
+          info={(tOrders?.length ?? 0).toString()}
           color="bg-amber-200"
         />
         <DashboardCard
@@ -147,6 +182,22 @@ export default function Main() {
           title="Total Products"
           info={(products?.length ?? 0).toString()}
           color="bg-red-200"
+        />
+        <DashboardCard
+          icon={<ArchiveBoxIcon className="w-5 h-5" />}
+          title="Past Week Revenue"
+          info={cediFormatter.format(pwRevenue)}
+          color="bg-red-200"
+        />
+        <DashboardCard
+          item={<RecentCustomers customers={recentCustomers} />}
+          title="Past Week Customers"
+        />
+        <DashboardCard
+          icon={<ShoppingBagIcon className="w-5 h-5" />}
+          title="Past Week Orders"
+          info={(pwOrders?.length ?? 0).toString()}
+          color="bg-amber-200"
         />
       </div>
       {productsOutOfStock && productsOutOfStock.length > 0 && (
