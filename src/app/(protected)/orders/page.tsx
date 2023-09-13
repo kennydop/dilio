@@ -22,7 +22,7 @@ export default function Orders() {
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<IOrder[]>([]);
-  const TABLE_HEAD = ["Order Code", "Date", "Total", "Status", ""];
+  const TABLE_HEAD = ["Order Code", "Date", "Total", "Status", "Actions"];
 
   useEffect(() => {
     const fetchOrders = async () => {

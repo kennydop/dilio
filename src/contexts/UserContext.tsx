@@ -186,8 +186,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     order.items.forEach(async (item) => {
       const product = await getDoc(doc(db, "products", item.id));
       const quantity = product.data()!.quantity - item.quantity;
+      const sold = (product.data()?.sold ?? 0) + item.quantity;
       await updateDoc(doc(db, "products", item.id), {
         quantity: quantity,
+        sold: sold,
       });
     });
   };

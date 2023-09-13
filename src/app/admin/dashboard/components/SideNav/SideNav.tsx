@@ -30,7 +30,7 @@ export default function SideNav({
       </div>
       <List>
         <ListItem
-          className={active == 0 ? "bg-primary text-white" : ""}
+          className={active == 0 ? "bg-primary text-white" : "bg-transparent"}
           onClick={(e) => {
             setActive(0);
           }}
@@ -42,9 +42,9 @@ export default function SideNav({
         </ListItem>
 
         <ListItem
-          className={active == 2 ? "bg-primary text-white" : ""}
+          className={active == 1 ? "bg-primary text-white" : ""}
           onClick={(e) => {
-            setActive(2);
+            setActive(1);
           }}
         >
           <ListItemPrefix>
@@ -54,9 +54,9 @@ export default function SideNav({
         </ListItem>
 
         <ListItem
-          className={active == 3 ? "bg-primary text-white" : ""}
+          className={active == 2 ? "bg-primary text-white" : ""}
           onClick={(e) => {
-            setActive(3);
+            setActive(2);
           }}
         >
           <ListItemPrefix>

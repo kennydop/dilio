@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 import { IOrder, IUserDoc } from "@/contexts/types";
-import OutOfStockTable from "./components/OutOfStockTable";
+import ProductsTable from "./components/ProductsTable";
 import {
   CartesianGrid,
   LineChart,
@@ -203,7 +203,11 @@ export default function Main() {
       {productsOutOfStock && productsOutOfStock.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="font-bold">Out of Stock</p>
-          <OutOfStockTable products={productsOutOfStock} />
+          <ProductsTable
+            show={["image", "name", "category", "added"]}
+            products={productsOutOfStock}
+            canDelete={false}
+          />
         </div>
       )}
 

@@ -14,6 +14,7 @@ interface IProduct {
   category: string;
   images: string[];
   quantity: number;
+  sold: number;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
