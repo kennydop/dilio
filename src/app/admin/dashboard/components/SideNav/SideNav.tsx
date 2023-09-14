@@ -9,6 +9,9 @@ import {
   PowerIcon,
   ArchiveBoxIcon,
   ShoppingBagIcon,
+  BackwardIcon,
+  BackspaceIcon,
+  ArrowLeftIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
@@ -65,11 +68,11 @@ export default function SideNav({
           Orders &amp; Deliveries
         </ListItem>
 
-        <ListItem className="text-red-500">
+        <ListItem>
           <ListItemPrefix>
-            <PowerIcon className="h-5 w-5" />
+            <ArrowLeftIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Log Out
+          Go to Store
         </ListItem>
       </List>
     </Card>

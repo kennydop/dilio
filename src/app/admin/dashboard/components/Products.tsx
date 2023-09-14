@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ProductsTable from "./(main)/components/ProductsTable";
 import { AppButton } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import AddProductDialog from "./AddProductDialog/AddProductDialog";
 
 export default function Products() {
   const [topSellingProducts, setTopSellingProducts] = useState<IProduct[]>([]);
@@ -104,10 +105,7 @@ export default function Products() {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center mb-2">
             <p className="font-bold">All Products</p>
-            <AppButton className="flex gap-2 justify-center items-center">
-              <PlusIcon className="h-5 w-5" />
-              <span>Add New Product</span>
-            </AppButton>
+            <AddProductDialog refresh={fetchData} />
           </div>
           <ProductsTable
             show={[

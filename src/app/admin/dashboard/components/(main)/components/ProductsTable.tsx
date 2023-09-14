@@ -86,8 +86,8 @@ export default function ProductsTable({
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {name.substring(0, 30) +
-                          (name.length > 30 ? "..." : "")}
+                        {name.substring(0, 20) +
+                          (name.length > 20 ? "..." : "")}
                       </Typography>
                     </td>
                   )}
@@ -101,8 +101,8 @@ export default function ProductsTable({
                         {category
                           .replaceAll("-", " ")
                           .replaceAll("and", "&")
-                          .substring(0, 20) +
-                          (category.length > 20 ? "..." : "")}
+                          .substring(0, 15) +
+                          (category.length > 15 ? "..." : "")}
                       </Typography>
                     </td>
                   )}
