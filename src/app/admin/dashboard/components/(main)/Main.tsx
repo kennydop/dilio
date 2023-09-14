@@ -207,6 +207,7 @@ export default function Main() {
             show={["image", "name", "category", "added"]}
             products={productsOutOfStock}
             canDelete={false}
+            refresh={fetchData}
           />
         </div>
       )}

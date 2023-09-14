@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ProductsTable from "./(main)/components/ProductsTable";
 import { AppButton } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import { PlusIcon } from "@heroicons/react/24/solid";
-import AddProductDialog from "./AddProductDialog/AddProductDialog";
+import AddEditProductDialog from "./AddProductDialog/AddEditProductDialog";
 
 export default function Products() {
   const [topSellingProducts, setTopSellingProducts] = useState<IProduct[]>([]);
@@ -88,6 +88,7 @@ export default function Products() {
             canEdit={false}
             canDelete={false}
             products={topSellingProducts}
+            refresh={fetchData}
           />
         </div>
       )}
@@ -98,6 +99,7 @@ export default function Products() {
             show={["image", "name", "category", "added"]}
             products={productsOutOfStock}
             canDelete={false}
+            refresh={fetchData}
           />
         </div>
       )}
@@ -105,7 +107,7 @@ export default function Products() {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center mb-2">
             <p className="font-bold">All Products</p>
-            <AddProductDialog refresh={fetchData} />
+            <AddEditProductDialog refresh={fetchData} />
           </div>
           <ProductsTable
             show={[
@@ -118,6 +120,7 @@ export default function Products() {
               "added",
             ]}
             products={products}
+            refresh={fetchData}
           />
         </div>
       )}

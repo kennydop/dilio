@@ -1,4 +1,4 @@
-import "./AddProductDialog.css";
+import "./AddEditProductDialog.css";
 import FormInput from "@/app/shared/components/Inputs/FormInput";
 import {
   AppButton,
@@ -26,6 +26,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export default function AddEditProductDialog({
+  btn,
   refresh,
   defProduct = {
     id: "",
@@ -39,7 +40,8 @@ export default function AddEditProductDialog({
     shipping: 0.0,
   },
 }: {
-  refresh: () => void;
+  btn?: JSX.Element;
+  refresh?: () => void;
   defProduct?: IProduct;
 }) {
   const [open, setOpen] = useState(false);
@@ -52,6 +54,10 @@ export default function AddEditProductDialog({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [product, setProduct] = useState<IProduct>(defProduct);
+
+  useEffect(() => {
+    if (defProduct.images.length > 0) setImagePreviews(defProduct.images);
+  }, [defProduct]);
 
   const fetchCategories = async () => {
     const q = query(collection(db, "categories"));
@@ -170,21 +176,25 @@ export default function AddEditProductDialog({
     setLoading(true);
     setError(null);
     try {
-      let imageUrls: string[] = [];
+      let imageUrls: string[] = imagePreviews.filter((preview) =>
+        preview.startsWith("https:")
+      );
+      let addedImageUrls: string[] = [];
       const docRef = product.id
         ? doc(db, "products", product.id)
         : doc(collection(db, "products"));
 
       if (selectedFiles) {
-        imageUrls = await uploadImages(selectedFiles, docRef.id);
+        addedImageUrls = await uploadImages(selectedFiles, docRef.id);
       }
+
+      imageUrls = [...imageUrls, ...addedImageUrls];
 
       const newProduct = {
         ...product,
         id: docRef.id,
-        sold: 0,
         images: imageUrls,
-        createdAt: new Date(),
+        createdAt: product.createdAt ?? new Date(),
         updatedAt: new Date(),
       };
       await setDoc(docRef, newProduct);
@@ -209,20 +219,25 @@ export default function AddEditProductDialog({
       setError(error?.message ?? error ?? "An error occured");
     }
     setLoading(false);
-    refresh();
+    if (refresh) refresh();
   };
 
   const handleOpen = () => setOpen(!open);
 
   return (
     <>
-      <AppButton
-        className="flex gap-2 justify-center items-center"
-        onClick={handleOpen}
-      >
-        <PlusIcon className="h-5 w-5" />
-        <span>Add New Product</span>
-      </AppButton>
+      {btn ? (
+        <div onClick={handleOpen}>{btn}</div>
+      ) : (
+        <AppButton
+          className="flex gap-2 justify-center items-center"
+          onClick={handleOpen}
+        >
+          <PlusIcon className="h-5 w-5" />
+          <span>Add New Product</span>
+        </AppButton>
+      )}
+
       <Dialog open={open} handler={handleOpen} size="sm">
         <DialogHeader className="flex flex-col text-start w-full items-start">
           <h2>
