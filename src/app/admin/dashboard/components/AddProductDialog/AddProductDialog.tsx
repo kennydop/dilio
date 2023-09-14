@@ -25,17 +25,9 @@ import Image from "next/image";
 
 import { useEffect, useRef, useState } from "react";
 
-export default function AddProductDialog({ refresh }: { refresh: () => void }) {
-  const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [added, setAdded] = useState<boolean>(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [product, setProduct] = useState<IProduct>({
+export default function AddEditProductDialog({
+  refresh,
+  defProduct = {
     id: "",
     name: "",
     category: "",
@@ -45,7 +37,21 @@ export default function AddProductDialog({ refresh }: { refresh: () => void }) {
     sold: 0,
     images: [],
     shipping: 0.0,
-  });
+  },
+}: {
+  refresh: () => void;
+  defProduct?: IProduct;
+}) {
+  const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [added, setAdded] = useState<boolean>(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [product, setProduct] = useState<IProduct>(defProduct);
 
   const fetchCategories = async () => {
     const q = query(collection(db, "categories"));
@@ -155,14 +161,19 @@ export default function AddProductDialog({ refresh }: { refresh: () => void }) {
     if (product.shipping < 1)
       return setError("Shipping fee must be greater than 0");
 
-    if (!selectedFiles || selectedFiles.length === 0)
+    if (
+      product.images.length < 1 &&
+      (!selectedFiles || selectedFiles.length === 0)
+    )
       return setError("Please upload at least one image");
 
     setLoading(true);
     setError(null);
     try {
       let imageUrls: string[] = [];
-      const docRef = doc(collection(db, "products"));
+      const docRef = product.id
+        ? doc(db, "products", product.id)
+        : doc(collection(db, "products"));
 
       if (selectedFiles) {
         imageUrls = await uploadImages(selectedFiles, docRef.id);

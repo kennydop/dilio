@@ -47,7 +47,7 @@ export default function Cart() {
   const config: PaystackProps = {
     reference: new Date().getTime().toString(),
     email: user?.email,
-    amount: totalAmount * 100,
+    amount: Math.ceil(totalAmount * 100),
     currency: "GHS",
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_TEST_PUBLIC_KEY!,
   };

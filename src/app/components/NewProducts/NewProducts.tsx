@@ -1,12 +1,21 @@
 /* eslint-disable @next/next/no-async-client-component */
 import { ProductCard } from "@/app/shared/components/Card/ProductCard";
-import { query, collection, orderBy, limit, getDocs } from "firebase/firestore";
+import {
+  query,
+  collection,
+  orderBy,
+  limit,
+  getDocs,
+  where,
+} from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 
 export default async function NewProducts() {
   const fetchNewProducts = async () => {
     const q = query(
       collection(db, "products"),
+      where("quantity", ">", 0),
+      orderBy("quantity", "desc"),
       orderBy("createdAt", "desc"),
       limit(9)
     );

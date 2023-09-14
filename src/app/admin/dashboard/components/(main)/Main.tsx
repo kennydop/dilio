@@ -163,31 +163,31 @@ export default function Main() {
           icon={<PresentationChartBarIcon className="w-5 h-5" />}
           title="Total Revenue"
           info={cediFormatter.format(tRevenue)}
-          color="bg-green-200"
+          color="bg-green-300"
         />
         <DashboardCard
           icon={<UsersIcon className="w-5 h-5" />}
           title="Total Customers"
           info={tCustomers.size.toString()}
-          color="bg-blue-200"
+          color="bg-blue-300"
         />
         <DashboardCard
           icon={<ShoppingBagIcon className="w-5 h-5" />}
           title="Total Orders"
           info={(tOrders?.length ?? 0).toString()}
-          color="bg-amber-200"
+          color="bg-amber-300"
         />
         <DashboardCard
           icon={<ArchiveBoxIcon className="w-5 h-5" />}
           title="Total Products"
           info={(products?.length ?? 0).toString()}
-          color="bg-red-200"
+          color="bg-red-300"
         />
         <DashboardCard
-          icon={<ArchiveBoxIcon className="w-5 h-5" />}
+          icon={<PresentationChartBarIcon className="w-5 h-5" />}
           title="Past Week Revenue"
           info={cediFormatter.format(pwRevenue)}
-          color="bg-red-200"
+          color="bg-purple-300"
         />
         <DashboardCard
           item={<RecentCustomers customers={recentCustomers} />}
@@ -197,7 +197,7 @@ export default function Main() {
           icon={<ShoppingBagIcon className="w-5 h-5" />}
           title="Past Week Orders"
           info={(pwOrders?.length ?? 0).toString()}
-          color="bg-amber-200"
+          color="bg-teal-300"
         />
       </div>
       {productsOutOfStock && productsOutOfStock.length > 0 && (
