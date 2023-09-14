@@ -38,6 +38,7 @@ export default function AddEditProductDialog({
     sold: 0,
     images: [],
     shipping: 0.0,
+    removed: false,
   },
 }: {
   btn?: JSX.Element;
@@ -210,6 +211,7 @@ export default function AddEditProductDialog({
         sold: 0,
         images: [],
         shipping: 0,
+        removed: false,
       });
       setSelectedFiles([]);
       setImagePreviews([]);

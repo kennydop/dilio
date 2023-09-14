@@ -15,6 +15,7 @@ interface IProduct {
   images: string[];
   quantity: number;
   sold: number;
+  removed: boolean;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }

@@ -13,7 +13,11 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
 
   const fetchProducts = async () => {
-    const q = query(collection(db, "products"));
+    const q = query(
+      collection(db, "products"),
+      where("removed", "==", false),
+      orderBy("updatedAt", "desc")
+    );
 
     const querySnapshot = await getDocs(q);
     const productsArray = querySnapshot.docs.map((doc) => {
@@ -32,6 +36,7 @@ export default function Products() {
   const fetchTopSellingProducts = async () => {
     const q = query(
       collection(db, "products"),
+      where("removed", "==", false),
       where("sold", ">", 0),
       orderBy("sold", "desc")
     );
@@ -44,19 +49,19 @@ export default function Products() {
   };
 
   const fetchProductsOutOfStock = async () => {
-    const q = query(collection(db, "products"));
+    const q = query(
+      collection(db, "products"),
+      where("removed", "==", false),
+      where("quantity", "<", 1),
+      orderBy("quantity", "desc"),
+      orderBy("updatedAt", "desc")
+    );
 
     const querySnapshot = await getDocs(q);
     const productsArray = querySnapshot.docs.map((doc) => {
       return doc.data() as IProduct;
     });
-    var _productsOutOfStock: IProduct[] = [];
-    productsArray.forEach((product) => {
-      if (product.quantity == 0) {
-        _productsOutOfStock.push(product);
-      }
-    });
-    setProductsOutOfStock(_productsOutOfStock);
+    setProductsOutOfStock(productsArray);
   };
 
   const fetchData = async () => {

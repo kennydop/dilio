@@ -13,6 +13,7 @@ export default async function CategoryPage({
     const q = query(
       collection(db, "products"),
       where("category", "==", category),
+      where("removed", "==", false),
       where("quantity", ">", 0),
       orderBy("quantity", "desc"),
       orderBy("updatedAt", "desc")

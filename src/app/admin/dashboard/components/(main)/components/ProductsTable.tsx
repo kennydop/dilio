@@ -7,6 +7,7 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Card, Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import AddEditProductDialog from "../../AddProductDialog/AddEditProductDialog";
+import RemoveProductDialog from "../../RemoveProductDialog/RemoveProductDialog";
 
 export default function ProductsTable({
   products,
@@ -170,13 +171,19 @@ export default function ProductsTable({
                         {canEdit && (
                           <div className="mx-2 border-l border-gray-400"></div>
                         )}
-                        <AppIconButton
-                          size="sm"
-                          variant="text"
-                          className="text-red-500"
-                        >
-                          <TrashIcon className="w-5 h-5" />
-                        </AppIconButton>
+                        <RemoveProductDialog
+                          btn={
+                            <AppIconButton
+                              size="sm"
+                              variant="text"
+                              className="text-red-500"
+                            >
+                              <TrashIcon className="w-5 h-5" />
+                            </AppIconButton>
+                          }
+                          defProduct={product}
+                          refresh={refresh}
+                        />
                       </>
                     )}
                   </td>
