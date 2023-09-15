@@ -14,7 +14,14 @@ import {
   DialogHeader,
   Button,
 } from "@material-tailwind/react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -54,6 +61,47 @@ export default function ViewEditOrderDialog({
 
     fetchProducts();
   }, [order]);
+
+  const updateOrder = async () => {
+    if (!order.status) setError("Please select a status");
+    if (order.status == defOrder.status) return handleOpen();
+    setLoading(true);
+    setError(null);
+    try {
+      const q = query(
+        collection(db, "orders"),
+        where("code", "==", order.code)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const docRef = doc(db, "orders", querySnapshot.docs[0].id);
+
+      var _d: any = {
+        status: order.status,
+        updatedAt: new Date(),
+      };
+
+      if (order.status == "delivered") {
+        _d["deliveredDate"] = new Date();
+      }
+      if (order.status == "cancelled") {
+        _d["cancelledDate"] = new Date();
+      }
+      if (order.status == "in-transit") {
+        _d["inTransitDate"] = new Date();
+      }
+      if (order.status == "processing") {
+        _d["processingDate"] = new Date();
+      }
+      await updateDoc(docRef, _d);
+      refresh();
+      handleOpen();
+    } catch (error: any) {
+      setError(error.message);
+    }
+    setLoading(false);
+  };
 
   const handleOpen = () => setOpen(!open);
 
@@ -126,9 +174,7 @@ export default function ViewEditOrderDialog({
                     "cancelled",
                     "delivered",
                   ]}
-                  onChange={(e) =>
-                    setOrder({ ...order, status: e.target.value })
-                  }
+                  onChange={(e) => setOrder({ ...order, status: e })}
                 />
               </div>
               <p className="font-bold">Products:</p>
@@ -173,7 +219,7 @@ export default function ViewEditOrderDialog({
               >
                 <span>Cancel</span>
               </Button>
-              <AppButton onClick={() => {}}>Edit Order </AppButton>
+              <AppButton onClick={updateOrder}>Edit Order </AppButton>
             </>
           )}
         </DialogFooter>
