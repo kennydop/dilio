@@ -18,11 +18,12 @@ import {
 import Link from "next/link";
 import { IOrder } from "@/contexts/types";
 
+const TABLE_HEAD = ["Order Code", "Date", "Total", "Status", "Actions"];
+
 export default function Orders() {
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<IOrder[]>([]);
-  const TABLE_HEAD = ["Order Code", "Date", "Total", "Status", "Actions"];
 
   useEffect(() => {
     const fetchOrders = async () => {

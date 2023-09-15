@@ -6,8 +6,8 @@ import { formatDate, toCapitalize } from "@/helpers/strings/strings";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Card, Typography } from "@material-tailwind/react";
 import Image from "next/image";
-import AddEditProductDialog from "../../AddProductDialog/AddEditProductDialog";
-import RemoveProductDialog from "../../RemoveProductDialog/RemoveProductDialog";
+import AddEditProductDialog from "../AddEditProductDialog/AddEditProductDialog";
+import RemoveProductDialog from "../RemoveProductDialog/RemoveProductDialog";
 
 export default function ProductsTable({
   products,

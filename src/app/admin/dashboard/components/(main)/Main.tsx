@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/services/firebase/config";
 import { IOrder, IUserDoc } from "@/contexts/types";
-import ProductsTable from "./components/ProductsTable";
+import ProductsTable from "../Tables/ProductsTable";
 import {
   CartesianGrid,
   LineChart,
@@ -95,7 +95,7 @@ export default function Main() {
     const sales = generateInitialSales();
     const q = query(
       collection(db, "orders"),
-      where("createdAt", ">", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)),
+      where("createdAt", ">", new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)),
       orderBy("createdAt", "desc")
     );
 

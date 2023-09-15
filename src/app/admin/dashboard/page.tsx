@@ -3,7 +3,18 @@ import { useUser } from "@/contexts/UserContext";
 import { useState } from "react";
 import SideNav from "./components/SideNav/SideNav";
 import Main from "./components/(main)/Main";
-import Products from "./components/Products";
+import Products from "./components/Products/Products";
+import OrdersAndDeliveries from "./components/OrdersAndDeliveries/OrdersAndDeliveries";
+
+interface IComponents {
+  [key: number]: JSX.Element;
+}
+
+const components: IComponents = {
+  0: <Main />,
+  1: <Products />,
+  2: <OrdersAndDeliveries />,
+};
 
 export default function Dashboard() {
   const { user, userDoc } = useUser();
@@ -13,7 +24,7 @@ export default function Dashboard() {
     <div className="flex">
       <SideNav active={active} setActive={setActive} />
       <div className="flex flex-col flex-1 h-screen p-4 overflow-auto">
-        {active == 0 ? <Main /> : active == 1 ? <Products /> : null}
+        {components[active]}
       </div>
     </div>
   ) : (

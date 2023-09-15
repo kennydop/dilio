@@ -1,10 +1,10 @@
 import { db } from "@/services/firebase/config";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import ProductsTable from "./(main)/components/ProductsTable";
+import ProductsTable from "../Tables/ProductsTable";
 import { AppButton } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import { PlusIcon } from "@heroicons/react/24/solid";
-import AddEditProductDialog from "./AddProductDialog/AddEditProductDialog";
+import AddEditProductDialog from "../AddEditProductDialog/AddEditProductDialog";
 
 export default function Products() {
   const [topSellingProducts, setTopSellingProducts] = useState<IProduct[]>([]);
