@@ -84,12 +84,15 @@ export default function ViewEditOrderDialog({
 
       if (order.status == "delivered") {
         _d["deliveredDate"] = new Date();
+        if (!order.inTransitDate) _d["inTransitDate"] = new Date();
+        if (!order.processingDate) _d["processingDate"] = new Date();
       }
       if (order.status == "cancelled") {
         _d["cancelledDate"] = new Date();
       }
       if (order.status == "in-transit") {
         _d["inTransitDate"] = new Date();
+        if (!order.processingDate) _d["processingDate"] = new Date();
       }
       if (order.status == "processing") {
         _d["processingDate"] = new Date();

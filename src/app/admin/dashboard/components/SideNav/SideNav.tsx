@@ -68,12 +68,14 @@ export default function SideNav({
           Orders &amp; Deliveries
         </ListItem>
 
-        <ListItem>
-          <ListItemPrefix>
-            <ArrowLeftIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Go to Store
-        </ListItem>
+        <Link href="/">
+          <ListItem>
+            <ListItemPrefix>
+              <ArrowLeftIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Go to Store
+          </ListItem>
+        </Link>
       </List>
     </Card>
   );
