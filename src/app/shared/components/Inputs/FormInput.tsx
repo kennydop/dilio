@@ -12,6 +12,7 @@ interface Props {
   value?: string;
   options?: string[];
   height?: string;
+  disabled?: boolean;
   onChange?: (e: any) => void;
 }
 
@@ -26,11 +27,13 @@ function FormInput({
   value,
   options = [],
   height,
+  disabled,
   onChange,
 }: Props) {
   return type === "select" ? (
     <div className="w-full">
       <Select
+        disabled={disabled}
         label={placeholder}
         title={title}
         value={value}
@@ -46,6 +49,7 @@ function FormInput({
     </div>
   ) : type === "textarea" ? (
     <textarea
+      disabled={disabled}
       placeholder={placeholder}
       required={required}
       autoComplete={autocomplete}
@@ -57,6 +61,7 @@ function FormInput({
     />
   ) : (
     <input
+      disabled={disabled}
       placeholder={placeholder}
       required={required}
       autoComplete={autocomplete}

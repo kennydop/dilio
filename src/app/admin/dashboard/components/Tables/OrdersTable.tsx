@@ -1,26 +1,25 @@
 import { AppIconButton } from "@/app/shared/components/MaterialTailwind/MaterialTailwind";
 import { IOrder } from "@/contexts/types";
 import { cediFormatter, formatDate } from "@/helpers/strings/strings";
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { EyeIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Card, Chip, Typography } from "@material-tailwind/react";
-import EditOrderDialog from "../EditOrderDialog/EditOrderDialog";
-
-const TABLE_HEAD = [
-  "Address",
-  "Order Code",
-  "Date",
-  "Total",
-  "Status",
-  "Actions",
-];
+import ViewEditOrderDialog from "../ViewEditOrderDialog/ViewEditOrderDialog";
 
 export default function OrdersTable({
   orders,
   refresh,
+  canView = true,
 }: {
   orders: IOrder[];
   refresh: () => void;
+  canView?: boolean;
 }) {
+  var TABLE_HEAD = ["Address", "Order Code", "Date", "Total", "Status"];
+
+  if (canView) {
+    TABLE_HEAD.push("Actions");
+  }
+
   return (
     <Card className="h-full w-full">
       <table className="w-full min-w-max table-auto text-left">
@@ -109,21 +108,25 @@ export default function OrdersTable({
                     </div>
                   </td>
                 </td>
-                <td className={`${classes} bg-blue-gray-50/50`}>
-                  <EditOrderDialog
-                    btn={
-                      <AppIconButton
-                        size="sm"
-                        variant="text"
-                        className="text-primary"
-                      >
-                        <PencilIcon className="w-5 h-5" />
-                      </AppIconButton>
+                {canView && (
+                  <td className={`${classes} bg-blue-gray-50/50`}>
+                    {
+                      <ViewEditOrderDialog
+                        btn={
+                          <AppIconButton
+                            size="sm"
+                            variant="text"
+                            className="text-primary"
+                          >
+                            <EyeIcon className="w-5 h-5" />
+                          </AppIconButton>
+                        }
+                        defOrder={order}
+                        refresh={refresh}
+                      />
                     }
-                    defOrder={order}
-                    refresh={refresh}
-                  />
-                </td>
+                  </td>
+                )}
               </tr>
             );
           })}

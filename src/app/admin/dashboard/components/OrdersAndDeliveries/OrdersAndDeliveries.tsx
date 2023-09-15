@@ -82,7 +82,11 @@ export default function OrdersAndDeliveries() {
       {deliveredOrders && deliveredOrders.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="font-bold">Delivered</p>
-          <OrdersTable orders={deliveredOrders} refresh={fetchData} />
+          <OrdersTable
+            orders={deliveredOrders}
+            refresh={fetchData}
+            canView={false}
+          />
         </div>
       )}
       {cancelledOrders && cancelledOrders.length > 0 && (
